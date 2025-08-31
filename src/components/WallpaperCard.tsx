@@ -2,6 +2,7 @@ import { WallpaperCategory, WallpaperSetting, CurrentConditions, TimePeriodsResp
 import { WALLPAPER_CATEGORIES } from "../types";
 import { getCurrentActiveWallpaper } from "../utils/wallpaper";
 import { convertFileSrc } from "@tauri-apps/api/core";
+import { Icon } from "./ui/Icon";
 
 interface WallpaperCardProps {
   categoryInfo: (typeof WALLPAPER_CATEGORIES)[0];
@@ -100,7 +101,10 @@ export function WallpaperCard({ categoryInfo, setting, currentConditions, timePe
                   </div>
                 </div>
                 <div className="flex justify-between items-center p-2 bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-800 rounded">
-                  <span className="text-cyan-700 dark:text-cyan-300 font-medium text-xs">✓ Image configured</span>
+                  <span className="text-cyan-700 dark:text-cyan-300 font-medium text-xs flex items-center gap-1">
+                    <Icon name="check" size={12} className="text-cyan-700 dark:text-cyan-300" />
+                    Image configured
+                  </span>
                   <button onClick={() => onFileSelect(categoryInfo.key)} className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded transition-colors">
                     Change
                   </button>

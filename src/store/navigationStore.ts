@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { IconName } from '../components/ui/Icon';
 
 export type PageType = 'home' | 'collections' | 'settings';
 
@@ -11,7 +12,7 @@ interface NavigationStore {
   pages: {
     [K in PageType]: {
       title: string;
-      icon: string;
+      icon: IconName;
       description: string;
     };
   };
@@ -27,17 +28,17 @@ export const useNavigationStore = create<NavigationStore>()(
       pages: {
         home: {
           title: 'Home',
-          icon: '🏠',
+          icon: 'home',
           description: 'Current status and overview'
         },
         collections: {
           title: 'Collections',
-          icon: '🖼️',
+          icon: 'gallery',
           description: 'Wallpaper categories and settings'
         },
         settings: {
           title: 'Settings',
-          icon: '⚙️',
+          icon: 'settings',
           description: 'App preferences and configuration'
         }
       }

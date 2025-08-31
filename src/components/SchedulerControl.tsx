@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { Icon } from "./ui/Icon";
 
 interface SchedulerStatus {
   enabled: boolean;
@@ -132,7 +133,7 @@ export function SchedulerControl() {
             className="px-4 py-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white rounded-lg text-sm transition-colors disabled:cursor-not-allowed"
             title="Refresh status"
           >
-            🔄
+            <Icon name="loading" size={16} className="text-white" />
           </button>
         </div>
 

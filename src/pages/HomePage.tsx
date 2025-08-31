@@ -8,6 +8,7 @@ import { useCollectionInitializer } from "../hooks/useCollectionInitializer";
 import { useActiveCollectionSettings } from "../hooks/useActiveCollectionSettings";
 import { getCurrentActiveWallpaper } from "../utils/wallpaper";
 import { useCollectionStore } from "../store/collectionStore";
+import { Icon } from "../components/ui/Icon";
 import { useNavigationStore } from "../store/navigationStore";
 import { WALLPAPER_CATEGORIES } from "../types";
 
@@ -182,7 +183,9 @@ export function HomePage() {
       <div className="grid grid-cols-2 gap-4">
         <button onClick={() => setCurrentPage("collections")} className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
           <div className="text-center">
-            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">🎨</div>
+            <div className="mb-3 group-hover:scale-110 transition-transform">
+              <Icon name="palette" size={36} className="text-gray-600 dark:text-gray-300" />
+            </div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Collections</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Manage wallpaper collections</p>
           </div>
@@ -190,7 +193,9 @@ export function HomePage() {
 
         <button onClick={() => setCurrentPage("settings")} className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
           <div className="text-center">
-            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">⚙️</div>
+            <div className="mb-3 group-hover:scale-110 transition-transform">
+              <Icon name="settings" size={36} className="text-gray-600 dark:text-gray-300" />
+            </div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Settings</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Configure app preferences</p>
           </div>

@@ -4,6 +4,7 @@ import { save, open } from "@tauri-apps/plugin-dialog";
 import { SchedulerControl } from "../components/SchedulerControl";
 import { useNavigationStore } from "../store/navigationStore";
 import { useCollectionStore } from "../store/collectionStore";
+import { Icon } from "../components/ui/Icon";
 
 interface AppSettings {
   weather_api_key: string;
@@ -185,7 +186,7 @@ export function SettingsPage() {
         apiKey: settings.weather_api_key,
         location: settings.use_auto_location ? "auto:ip" : settings.location,
       });
-      setMessageWithAutoDismiss("API key test successful! ✅");
+      setMessageWithAutoDismiss("API key test successful! ✓");
     } catch (error) {
       setMessageWithAutoDismiss(`API test failed: ${error}`, true);
     } finally {
@@ -368,8 +369,9 @@ export function SettingsPage() {
           <div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Export your settings and wallpapers to a backup file, or restore from a previous backup.</p>
             <div className="flex space-x-3">
-              <button onClick={exportBackup} disabled={isImporting} className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
-                📤 Export Backup
+              <button onClick={exportBackup} disabled={isImporting} className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors flex items-center space-x-2">
+                <Icon name="upload" size={16} className="text-white" />
+                <span>Export Backup</span>
               </button>
               <button
                 onClick={importBackup}
@@ -383,7 +385,7 @@ export function SettingsPage() {
                   </>
                 ) : (
                   <>
-                    <span>📥</span>
+                    <Icon name="download" size={16} className="text-white" />
                     <span>Import Backup</span>
                   </>
                 )}

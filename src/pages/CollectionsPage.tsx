@@ -187,19 +187,19 @@ export function CollectionsPage() {
               {
                 id: "weather",
                 label: "Weather",
-                icon: "🌦️",
+                icon: "weather",
                 count: weatherCategories.length,
               },
               {
                 id: "time",
                 label: "Time",
-                icon: "🕐",
+                icon: "time",
                 count: timeCategories.length,
               },
               {
                 id: "default",
                 label: "Default",
-                icon: "🔧",
+                icon: "tools",
                 count: defaultCategories.length,
               },
             ]}
