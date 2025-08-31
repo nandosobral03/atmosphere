@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(bun add:*)",
+      "Bash(cargo check:*)",
+      "WebFetch(domain:v2.tauri.app)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
