@@ -1,4 +1,5 @@
 import { useNavigationStore } from "./store/navigationStore";
+import { useSchedulerInitialization } from "./hooks/useSchedulerInitialization";
 import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
 import { SettingsPage } from "./pages/SettingsPage";
@@ -6,6 +7,9 @@ import "./App.css";
 
 function App() {
   const { currentPage } = useNavigationStore();
+  
+  // Initialize scheduler on app startup
+  useSchedulerInitialization();
 
   const renderCurrentPage = () => {
     switch (currentPage) {

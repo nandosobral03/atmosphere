@@ -58,38 +58,39 @@ fn save_scheduler_config(config: &SchedulerConfig) -> Result<(), String> {
 
 async fn scheduler_loop(config: SchedulerConfig) {
     let mut interval_timer = interval(Duration::from_secs(config.interval_minutes * 60));
-    let mut current_config = config.clone();
+    let interval_minutes = config.interval_minutes;
     
-    println!("Wallpaper scheduler started with {} minute intervals", config.interval_minutes);
+    println!("Wallpaper scheduler started with {} minute intervals", interval_minutes);
     
     loop {
         interval_timer.tick().await;
         
-        // Check if scheduler is still enabled
-        {
+        // Check if scheduler is still enabled and get current config
+        let current_config = {
             let global_config = SCHEDULER_CONFIG.lock().unwrap();
             if let Some(ref global) = *global_config {
                 if !global.enabled {
                     println!("Scheduler disabled, stopping loop");
                     break;
                 }
-                current_config = global.clone();
+                global.clone()
             } else {
                 println!("Scheduler config not found, stopping loop");
                 break;
             }
-        }
+        };
         
         println!("Scheduler tick: checking wallpaper conditions...");
         
-        match check_and_apply_wallpaper(&mut current_config).await {
+        let mut mutable_config = current_config.clone();
+        match check_and_apply_wallpaper(&mut mutable_config).await {
             Ok(applied) => {
                 if applied {
                     // Update the global config with new last_applied_path
                     {
                         let mut global_config = SCHEDULER_CONFIG.lock().unwrap();
                         if let Some(ref mut global) = *global_config {
-                            global.last_applied_path = current_config.last_applied_path.clone();
+                            global.last_applied_path = mutable_config.last_applied_path.clone();
                             let _ = save_scheduler_config(global);
                         }
                     }
@@ -240,6 +241,34 @@ pub async fn stop_wallpaper_scheduler() -> Result<String, String> {
     }
     
     Ok("Wallpaper scheduler stopped".to_string())
+}
+
+#[tauri::command]
+pub async fn initialize_scheduler() -> Result<String, String> {
+    let config = load_scheduler_config();
+    
+    if config.enabled {
+        // Restart the scheduler if it was previously enabled
+        println!("Restoring previously enabled scheduler with {} minute intervals", config.interval_minutes);
+        
+        // Update global config
+        {
+            let mut global_config = SCHEDULER_CONFIG.lock().unwrap();
+            *global_config = Some(config.clone());
+        }
+        
+        // Start the scheduler task
+        let handle = tokio::spawn(scheduler_loop(config.clone()));
+        
+        {
+            let mut scheduler_handle = SCHEDULER_HANDLE.lock().unwrap();
+            *scheduler_handle = Some(handle);
+        }
+        
+        Ok(format!("Scheduler automatically restored with {} minute intervals", config.interval_minutes))
+    } else {
+        Ok("Scheduler was not previously enabled".to_string())
+    }
 }
 
 #[tauri::command]

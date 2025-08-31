@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { StatusDisplay } from "../components/StatusDisplay";
+import { Card, Button, Badge, StatusDot, CardSkeleton } from "../components/ui";
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import { useCollectionInitializer } from "../hooks/useCollectionInitializer";
 import { useActiveCollectionSettings } from "../hooks/useActiveCollectionSettings";
@@ -71,7 +72,7 @@ export function HomePage() {
 
       {/* Wallpaper Status & Priority */}
       {currentConditions ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 mb-6">
+        <Card className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">Wallpaper Status</h3>
             <div className="flex items-center space-x-3">
@@ -80,17 +81,12 @@ export function HomePage() {
                   {activeCollection.name}
                 </div>
               )}
-              <button
-                onClick={toggleScheduler}
-                disabled={isToggling || !schedulerStatus}
-                className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors disabled:cursor-not-allowed ${
-                  schedulerStatus?.enabled && schedulerStatus?.is_running 
-                    ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300" 
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
-                } disabled:bg-gray-400`}
+              <Badge
+                variant={schedulerStatus?.enabled && schedulerStatus?.is_running ? "success" : "secondary"}
+                size="sm"
               >
                 Auto: {schedulerStatus?.enabled && schedulerStatus?.is_running ? "ON" : "OFF"}
-              </button>
+              </Badge>
             </div>
           </div>
 
@@ -116,15 +112,11 @@ export function HomePage() {
                 const hasImage = true; // All items in this list have images due to filtering
 
                 return (
-                  <div
+                  <Card
                     key={category}
-                    className={`flex items-center space-x-3 p-3 rounded-lg border ${
-                      isActive
-                        ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600"
-                        : hasImage
-                        ? "bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-700"
-                        : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
-                    }`}
+                    variant={isActive ? "success" : hasImage ? "info" : "default"}
+                    padding="md"
+                    className="flex items-center space-x-3"
                   >
                     {/* Thumbnail for active wallpaper */}
                     {isActive && hasImage && (
@@ -143,29 +135,30 @@ export function HomePage() {
                       </div>
                     )}
                     
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${isActive ? "bg-green-500" : hasImage ? "bg-blue-500" : "bg-gray-400"}`} />
+                    <StatusDot variant={isActive ? "success" : hasImage ? "info" : "inactive"} />
                     
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center space-x-2">
                         <div className={`text-sm font-medium ${isActive ? "text-green-900 dark:text-green-100" : "text-gray-900 dark:text-white"}`}>
                           {info?.label || category}
                         </div>
-                        {isActive && <span className="text-xs bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 px-1.5 py-0.5 rounded-full">ACTIVE</span>}
-                        {!isActive && <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded-full">READY</span>}
+                        <Badge variant={isActive ? "success" : "info"} size="xs">
+                          {isActive ? "ACTIVE" : "READY"}
+                        </Badge>
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
                         Priority: {setting.priority} • #{index + 1}
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 );
               });
             })()}
           </div>
-        </div>
+        </Card>
       ) : (
         /* Skeleton Loader for Wallpaper Status */
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 mb-6">
+        <Card className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
             <div className="flex items-center space-x-3">
@@ -176,19 +169,10 @@ export function HomePage() {
           
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
-                <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-24 animate-pulse"></div>
-                    <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-12 animate-pulse"></div>
-                  </div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-32 animate-pulse"></div>
-                </div>
-              </div>
+              <CardSkeleton key={i} />
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Spacer to push navigation to bottom */}

@@ -25,9 +25,3 @@ pub fn get_location_key(location: &str) -> String {
     location.to_lowercase().trim().to_string()
 }
 
-pub fn load_env_vars() {
-    if let Err(_) = dotenv::dotenv() {
-        // .env file not found or couldn't be loaded
-        // Environment variables might still be set system-wide
-    }
-}

@@ -6,3 +6,4 @@ pub mod wallpaper;
 pub mod greet;
 pub mod scheduler;
 pub mod settings;
+pub mod backup;
