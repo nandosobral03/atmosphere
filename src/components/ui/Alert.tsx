@@ -10,10 +10,10 @@ export interface AlertProps {
 }
 
 const alertVariants = {
-  success: 'bg-[var(--color-success-light)] text-[var(--color-success-hover)] border-[var(--color-success-hover)] dark:bg-[var(--color-success-dark)] dark:text-[var(--color-success)] dark:border-[var(--color-success)]',
-  danger: 'bg-[var(--color-danger-light)] text-[var(--color-danger-hover)] border-[var(--color-danger-hover)] dark:bg-[var(--color-danger-dark)] dark:text-[var(--color-danger)] dark:border-[var(--color-danger)]',
-  warning: 'bg-[var(--color-warning-light)] text-[var(--color-warning-hover)] border-[var(--color-warning-hover)] dark:bg-[var(--color-warning-dark)] dark:text-[var(--color-warning)] dark:border-[var(--color-warning)]',
-  info: 'bg-[var(--color-info-light)] text-[var(--color-info-hover)] border-[var(--color-info-hover)] dark:bg-[var(--color-info-dark)] dark:text-[var(--color-info)] dark:border-[var(--color-info)]'
+  success: 'bg-success-light text-success-hover border-success-hover',
+  danger: 'bg-danger-light text-danger-hover border-danger-hover',
+  warning: 'bg-warning-light text-warning-hover border-warning-hover',
+  info: 'bg-info-light text-info-hover border-info-hover'
 };
 
 export function Alert({
@@ -23,7 +23,7 @@ export function Alert({
   className = '',
   children
 }: AlertProps) {
-  const baseClasses = 'p-[var(--spacing-md)] rounded-[var(--radius-lg)] text-[var(--font-size-sm)] font-medium transition-all duration-300 border';
+  const baseClasses = 'p-3 rounded-xl text-sm font-medium transition-all duration-300 border';
   const variantClasses = alertVariants[variant];
   
   const combinedClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
@@ -35,7 +35,7 @@ export function Alert({
         {dismissible && onDismiss && (
           <button
             onClick={onDismiss}
-            className="ml-[var(--spacing-lg)] p-[var(--spacing-xs)] hover:opacity-70 transition-opacity"
+            className="ml-4 p-1 hover:opacity-70 transition-opacity"
             aria-label="Dismiss"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

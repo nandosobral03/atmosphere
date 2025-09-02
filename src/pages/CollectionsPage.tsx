@@ -20,12 +20,11 @@ export function CollectionsPage() {
 
   const { updateSetting } = useWallpaperStore();
   const settings = useActiveCollectionSettings();
-  const { getActiveCollection, validateCollection } = useCollectionStore();
+  const { getActiveCollection } = useCollectionStore();
   const { setCurrentPage } = useNavigationStore();
   const { currentConditions } = useCurrentConditions();
   const { timePeriods } = useTimePeriods();
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"weather" | "time" | "default">("weather");
   const messageTimeoutRef = useRef<any>();
 
@@ -76,41 +75,6 @@ export function CollectionsPage() {
     }
   };
 
-  const handleSaveConfiguration = async () => {
-    const activeCollection = getActiveCollection();
-
-    if (!activeCollection) {
-      setMessage("No active collection selected");
-      return;
-    }
-
-    // Validate collection before saving
-    const validation = validateCollection(activeCollection);
-    if (!validation.isValid) {
-      setMessage(`Cannot save: ${validation.error}`);
-      return;
-    }
-
-    const activeWallpaper = getCurrentActiveWallpaper(currentConditions, settings);
-
-    if (!activeWallpaper?.setting?.imagePath) {
-      setMessage("No wallpaper configured for current conditions");
-      return;
-    }
-
-    setIsLoading(true);
-    setMessageWithAutoDismiss("Applying wallpaper...");
-
-    try {
-      await invoke("set_wallpaper", { path: activeWallpaper.setting.imagePath });
-      setMessageWithAutoDismiss(`Configuration saved and wallpaper applied from "${activeCollection.name}"!`);
-    } catch (error) {
-      setMessage(`Error: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const toggleCategory = (category: WallpaperCategory) => {
     const currentSetting = settings[category];
     updateSetting(category, { enabled: !currentSetting.enabled });
@@ -144,7 +108,7 @@ export function CollectionsPage() {
   const defaultCategories = WALLPAPER_CATEGORIES.filter((cat) => cat.key === "default");
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 bg-bg-primary backdrop-blur-sm min-h-screen">
       {/* Header with Back Button */}
       <div className="flex items-center space-x-3 mb-4">
         <IconButton onClick={() => setCurrentPage("home")} variant="ghost" title="Back to Home">
@@ -152,14 +116,7 @@ export function CollectionsPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </IconButton>
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Collections</span>
-      </div>
-
-      {/* Apply Button */}
-      <div className="text-center mb-4">
-        <Button variant="primary" size="md" onClick={handleSaveConfiguration} disabled={isLoading || !hasSettings || !activeCollection} loading={isLoading} className="w-full">
-          {isLoading ? "Saving..." : activeCollection ? `Apply Wallpaper from "${activeCollection.name}"` : "No Collection Selected"}
-        </Button>
+        <span className="text-sm font-medium text-text-primary">Collections</span>
       </div>
 
       {/* Collection Selector */}
@@ -176,8 +133,8 @@ export function CollectionsPage() {
       {hasSettings && activeCollection ? (
         <div className="space-y-4">
           <Card variant="info" padding="sm">
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">Editing: {activeCollection.name}</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Configure wallpapers for different weather conditions and times of day</p>
+            <h3 className="text-sm font-medium text-text-primary mb-1">Editing: {activeCollection.name}</h3>
+            <p className="text-xs text-text-secondary">Configure wallpapers for different weather conditions and times of day</p>
           </Card>
 
           {/* Tab Navigation */}
@@ -271,7 +228,7 @@ export function CollectionsPage() {
           </div>
         </div>
       ) : (
-        <div className="text-center text-gray-500 dark:text-gray-400 py-8">{!activeCollection ? "Select or create a collection to start configuring wallpapers." : "Loading collection settings..."}</div>
+        <div className="text-center text-text-secondary py-8">{!activeCollection ? "Select or create a collection to start configuring wallpapers." : "Loading collection settings..."}</div>
       )}
     </div>
   );

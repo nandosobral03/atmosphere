@@ -28,11 +28,11 @@ function App() {
 
   return (
     <main 
-      className="h-screen overflow-y-auto bg-bg-gradient relative"
+      className="min-h-screen overflow-y-auto bg-bg-gradient relative"
     >
       <IconSprite />
       <BackgroundShapes />
-      <div className="max-w-md mx-auto h-full relative z-10">
+      <div className="max-w-md mx-auto min-h-screen relative z-10">
         {renderCurrentPage()}
       </div>
     </main>

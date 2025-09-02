@@ -67,7 +67,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="p-4 h-full flex flex-col bg-bg-primary backdrop-blur-sm">
+    <div className="p-4 h-full flex flex-col bg-bg-primary backdrop-blur-sm min-h-screen">
       {/* Status Display */}
       <StatusDisplay currentConditions={currentConditions} />
 

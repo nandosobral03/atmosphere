@@ -1,10 +1,11 @@
 import React from 'react';
 import { ReactNode } from 'react';
+import { Icon, IconName } from './Icon';
 
 export interface TabItem {
   id: string;
   label: string;
-  icon?: ReactNode;
+  icon?: ReactNode | IconName;
   count?: number;
   disabled?: boolean;
 }
@@ -20,23 +21,23 @@ export interface TabBarProps {
 
 const tabVariants = {
   default: {
-    container: 'bg-[var(--color-gray-100)] dark:bg-[var(--color-gray-700)] rounded-[var(--radius-lg)]',
-    tab: 'rounded-[var(--radius-md)]',
-    active: 'bg-[var(--color-primary)] text-white',
-    inactive: 'text-[var(--color-gray-700)] dark:text-[var(--color-gray-300)] hover:bg-[var(--color-gray-50)] dark:hover:bg-[var(--color-gray-600)]'
+    container: 'bg-surface rounded-xl',
+    tab: 'rounded-lg',
+    active: 'bg-primary text-text-inverse',
+    inactive: 'text-text-primary hover:bg-border'
   },
   bordered: {
-    container: 'border border-[var(--color-gray-200)] dark:border-[var(--color-gray-600)] rounded-[var(--radius-lg)] overflow-hidden',
+    container: 'border border-border rounded-xl overflow-hidden',
     tab: '',
-    active: 'bg-[var(--color-primary)] text-white',
-    inactive: 'bg-[var(--color-white)] dark:bg-[var(--color-gray-800)] text-[var(--color-gray-700)] dark:text-[var(--color-gray-300)] hover:bg-[var(--color-gray-50)] dark:hover:bg-[var(--color-gray-700)] border-r border-[var(--color-gray-200)] dark:border-[var(--color-gray-600)] last:border-r-0'
+    active: 'bg-primary text-text-inverse',
+    inactive: 'bg-card text-text-primary hover:bg-surface border-r border-border last:border-r-0'
   }
 };
 
 const tabSizes = {
-  sm: 'px-[var(--spacing-md)] py-[var(--spacing-sm)] text-[var(--font-size-xs)]', // px-3 py-2 text-xs
-  md: 'px-[var(--spacing-lg)] py-[var(--spacing-sm)] text-[var(--font-size-sm)]', // px-4 py-2 text-sm
-  lg: 'px-[var(--spacing-2xl)] py-[var(--spacing-md)] text-[var(--font-size-md)]' // px-6 py-3 text-base
+  sm: 'px-3 py-2 text-xs',
+  md: 'px-4 py-2 text-sm',
+  lg: 'px-6 py-3 text-base'
 };
 
 export function TabBar({
@@ -72,11 +73,19 @@ export function TabBar({
             disabled={isDisabled}
             className={tabClasses}
           >
-            <div className="flex items-center justify-center space-x-[var(--spacing-sm)]">
-              {tab.icon && <span>{tab.icon}</span>}
+            <div className="flex items-center justify-center space-x-2">
+              {tab.icon && (
+                <span>
+                  {typeof tab.icon === 'string' ? (
+                    <Icon name={tab.icon as IconName} size={16} />
+                  ) : (
+                    tab.icon
+                  )}
+                </span>
+              )}
               <span>{tab.label}</span>
               {tab.count !== undefined && (
-                <span className="ml-1 text-[var(--font-size-xs)] opacity-75">
+                <span className="ml-1 text-xs opacity-75">
                   ({tab.count})
                 </span>
               )}

@@ -218,10 +218,10 @@ export function SettingsPage() {
   }, []);
 
   return (
-    <div className="p-4 space-y-6 relative bg-bg-primary backdrop-blur-sm">
+    <div className="p-4 space-y-6 relative bg-bg-primary backdrop-blur-sm min-h-screen">
       {/* Full-Screen Import Overlay */}
       {isImporting && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-2xl p-8 max-w-md w-full mx-4 shadow-card-hover border border-border">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -321,15 +321,12 @@ export function SettingsPage() {
       </div>
 
       {/* Save Button */}
-      <Button
-        onClick={saveSettings}
-        disabled={isLoading || isImporting}
-        size="lg"
-        className="w-full"
-      >
+      <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full">
         {isLoading ? "Saving..." : isImporting ? "Import in Progress..." : "Save Settings"}
       </Button>
       {/* Scheduler Settings */}
+
+      <SchedulerControl />
 
       {/* Cache Management */}
       <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
@@ -351,9 +348,7 @@ export function SettingsPage() {
             <p className="text-xs text-text-secondary mt-1">Weather data is cached to reduce API calls. Shorter duration = more up-to-date data but more API usage.</p>
           </div>
           <div>
-            <Button onClick={clearWeatherCache}>
-              Clear Weather Cache
-            </Button>
+            <Button onClick={clearWeatherCache}>Clear Weather Cache</Button>
           </div>
         </div>
       </div>

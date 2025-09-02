@@ -14,7 +14,7 @@ const cardVariants = {
   default: 'bg-card border-border',
   highlighted: 'bg-primary-light border-primary',
   status: 'bg-primary-light border-primary-hover',
-  info: 'bg-info-light border-info-hover',
+  info: 'bg-primary-light border-primary',
   success: 'bg-success-light border-success-hover',
   warning: 'bg-warning-light border-warning-hover',
   danger: 'bg-danger-light border-danger-hover',

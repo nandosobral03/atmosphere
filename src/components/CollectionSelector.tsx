@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useCollectionStore } from "../store/collectionStore";
 
 interface CollectionSelectorProps {
@@ -13,6 +14,10 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
   const [editingCollectionId, setEditingCollectionId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    collectionId: string;
+    collectionName: string;
+  } | null>(null);
 
   const collectionList = Object.values(collections);
   const activeCollection = activeCollectionId ? collections[activeCollectionId] : null;
@@ -52,10 +57,23 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
       return;
     }
 
-    if (confirm("Are you sure you want to delete this collection? This action cannot be undone.")) {
-      deleteCollection(collectionId);
+    const collection = collections[collectionId];
+    setDeleteConfirmation({
+      collectionId,
+      collectionName: collection.name,
+    });
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmation) {
+      deleteCollection(deleteConfirmation.collectionId);
       onCollectionChange?.(activeCollectionId);
+      setDeleteConfirmation(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(null);
   };
 
   const handleStartEdit = (collectionId: string, currentName: string, event: React.MouseEvent) => {
@@ -94,17 +112,17 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
       <div className="flex items-center justify-between mb-3">
-        <button onClick={() => setShowCreateForm(true)} className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors">
+        <button onClick={() => setShowCreateForm(true)} className="bg-primary hover:bg-primary-hover text-text-inverse text-sm font-medium px-3 py-1.5 rounded-xl transition-colors">
           + New Collection
         </button>
       </div>
 
-      {error && <div className="mb-3 p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 text-sm rounded-lg border border-red-200 dark:border-red-800">{error}</div>}
+      {error && <div className="mb-3 p-2 bg-danger-light text-danger-hover text-sm rounded-xl border border-danger">{error}</div>}
 
       {showCreateForm && (
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+        <div className="mb-4 p-3 bg-surface rounded-xl border border-border">
           <div className="flex gap-2">
             <input
               type="text"
@@ -119,10 +137,10 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
                 }
               }}
               placeholder="Collection name..."
-              className="flex-1 px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-2 py-1.5 text-sm border border-border rounded-lg bg-card text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent"
               autoFocus
             />
-            <button onClick={handleCreateCollection} className="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-3 py-1.5 rounded transition-colors">
+            <button onClick={handleCreateCollection} className="bg-primary hover:bg-primary-hover text-text-inverse text-sm font-medium px-3 py-1.5 rounded-lg transition-colors">
               Create
             </button>
             <button
@@ -131,7 +149,7 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
                 setNewCollectionName("");
                 setError(null);
               }}
-              className="bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium px-3 py-1.5 rounded transition-colors"
+              className="bg-surface hover:bg-border text-text-primary text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
             >
               Cancel
             </button>
@@ -141,7 +159,7 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
 
       <div className="space-y-2">
         {collectionList.length === 0 ? (
-          <div className="text-gray-500 dark:text-gray-400 text-sm text-center py-4">No collections yet. Create your first collection to get started.</div>
+          <div className="text-text-secondary text-sm text-center py-4">No collections yet. Create your first collection to get started.</div>
         ) : (
           collectionList.map((collection) => {
             const isActive = collection.id === activeCollectionId;
@@ -153,17 +171,13 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
               <div
                 key={collection.id}
                 onClick={isEditing ? undefined : () => handleCollectionChange(collection.id)}
-                className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                  isEditing
-                    ? "bg-yellow-50 dark:bg-yellow-900/10 border-yellow-300 dark:border-yellow-600"
-                    : isActive
-                    ? "bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-600 cursor-pointer"
-                    : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                className={`flex items-center justify-between p-3 rounded-xl border transition-colors ${
+                  isEditing ? "bg-warning-light border-warning" : isActive ? "bg-primary-light border-primary cursor-pointer" : "bg-surface border-border hover:bg-border cursor-pointer"
                 }`}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center space-x-2">
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${isActive ? "bg-blue-500" : "bg-gray-400"}`} />
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${isActive ? "bg-primary" : "bg-border"}`} />
                     {isEditing ? (
                       <input
                         type="text"
@@ -173,29 +187,27 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
                           if (e.key === "Enter") handleSaveEdit();
                           if (e.key === "Escape") handleCancelEdit();
                         }}
-                        className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-1 px-2 py-1 text-sm border border-border rounded bg-card text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent"
                         autoFocus
                       />
                     ) : (
-                      <div className={`font-medium truncate ${isActive ? "text-blue-900 dark:text-blue-100" : "text-gray-900 dark:text-white"}`}>{collection.name}</div>
+                      <div className={`font-medium truncate ${isActive ? "text-primary" : "text-text-primary"}`}>{collection.name}</div>
                     )}
-                    {isActive && <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
-                    {!validation.isValid && <span className="text-xs bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full flex-shrink-0">INVALID</span>}
+                    {isActive && <span className="text-xs bg-primary-light text-primary px-2 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
+                    {!validation.isValid && <span className="text-xs bg-danger-light text-danger px-2 py-0.5 rounded-full flex-shrink-0">INVALID</span>}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {!validation.isValid && validation.error ? <span className="text-red-500 dark:text-red-400">{validation.error}</span> : `Created ${new Date(collection.createdAt).toLocaleDateString()}`}
-                  </div>
+                  <div className="text-xs text-text-secondary mt-1">{!validation.isValid && validation.error ? <span className="text-danger">{validation.error}</span> : `Created ${new Date(collection.createdAt).toLocaleDateString()}`}</div>
                 </div>
 
                 <div className="flex items-center space-x-1 flex-shrink-0">
                   {isEditing ? (
                     <>
-                      <button onClick={handleSaveEdit} className="p-1 text-green-500 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors" title="Save name">
+                      <button onClick={handleSaveEdit} className="p-1 text-primary hover:text-primary-hover hover:bg-primary-light rounded transition-colors" title="Save name">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </button>
-                      <button onClick={handleCancelEdit} className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/20 rounded transition-colors" title="Cancel edit">
+                      <button onClick={handleCancelEdit} className="p-1 text-text-secondary hover:text-text-primary hover:bg-surface rounded transition-colors" title="Cancel edit">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -203,17 +215,13 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
                     </>
                   ) : (
                     <>
-                      <button
-                        onClick={(e) => handleStartEdit(collection.id, collection.name, e)}
-                        className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
-                        title="Rename collection"
-                      >
+                      <button onClick={(e) => handleStartEdit(collection.id, collection.name, e)} className="p-1 text-primary hover:text-primary-hover hover:bg-primary-light rounded transition-colors" title="Rename collection">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
                       </button>
                       {collectionList.length > 1 && (
-                        <button onClick={(e) => handleDeleteCollection(collection.id, e)} className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Delete collection">
+                        <button onClick={(e) => handleDeleteCollection(collection.id, e)} className="p-1 text-danger hover:text-danger-hover hover:bg-danger-light rounded transition-colors" title="Delete collection">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -228,18 +236,25 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
         )}
       </div>
 
-      {activeCollection && (
-        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-          <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-            <div>
-              <strong>Active:</strong> {activeCollection.name}
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-card rounded-2xl p-6 max-w-sm mx-4 border border-border shadow-card-hover">
+              <h3 className="text-lg font-semibold text-text-primary mb-2">Delete Collection</h3>
+              <p className="text-sm text-text-secondary mb-4">Are you sure you want to delete "{deleteConfirmation.collectionName}"? This action cannot be undone.</p>
+              <div className="flex gap-2 justify-end">
+                <button onClick={cancelDelete} className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-surface rounded-lg transition-colors">
+                  Cancel
+                </button>
+                <button onClick={confirmDelete} className="px-4 py-2 text-sm bg-danger hover:bg-danger-hover text-white rounded-lg transition-colors">
+                  Delete
+                </button>
+              </div>
             </div>
-            <div>
-              <strong>Last Modified:</strong> {new Date(activeCollection.lastModified).toLocaleString()}
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
