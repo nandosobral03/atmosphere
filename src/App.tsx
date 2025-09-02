@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useNavigationStore } from "./store/navigationStore";
+import { useThemeStore } from "./store/themeStore";
 import { useSchedulerInitialization } from "./hooks/useSchedulerInitialization";
 import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
@@ -9,17 +11,21 @@ import "./App.css";
 
 function App() {
   const { currentPage } = useNavigationStore();
-  
-  // Initialize scheduler on app startup
+  const { theme } = useThemeStore();
+
   useSchedulerInitialization();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'home':
+      case "home":
         return <HomePage />;
-      case 'collections':
+      case "collections":
         return <CollectionsPage />;
-      case 'settings':
+      case "settings":
         return <SettingsPage />;
       default:
         return <HomePage />;
@@ -27,14 +33,10 @@ function App() {
   };
 
   return (
-    <main 
-      className="min-h-screen overflow-y-auto bg-bg-gradient relative"
-    >
+    <main className="min-h-screen overflow-y-auto bg-bg-gradient relative">
       <IconSprite />
       <BackgroundShapes />
-      <div className="max-w-md mx-auto min-h-screen relative z-10">
-        {renderCurrentPage()}
-      </div>
+      <div className="max-w-md mx-auto min-h-screen relative z-10">{renderCurrentPage()}</div>
     </main>
   );
 }

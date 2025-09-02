@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { WallpaperCard } from "../components/WallpaperCard";
 import { CollectionSelector } from "../components/CollectionSelector";
-import { Button, Card, Alert, TabBar, IconButton } from "../components/ui";
+import { Card, Alert, TabBar, IconButton } from "../components/ui";
 import { Icon } from "../components/ui/Icon";
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import { useTimePeriods } from "../hooks/useTimePeriods";
@@ -13,10 +13,8 @@ import { useWallpaperStore } from "../store/wallpaperStore";
 import { useCollectionStore } from "../store/collectionStore";
 import { useNavigationStore } from "../store/navigationStore";
 import { WALLPAPER_CATEGORIES, WallpaperCategory } from "../types";
-import { getCurrentActiveWallpaper } from "../utils/wallpaper";
 
 export function CollectionsPage() {
-  // Initialize collections if none exist
   useCollectionInitializer();
 
   const { updateSetting } = useWallpaperStore();
@@ -29,16 +27,13 @@ export function CollectionsPage() {
   const [activeTab, setActiveTab] = useState<"weather" | "time" | "default">("weather");
   const messageTimeoutRef = useRef<any>();
 
-  // Auto-dismiss success messages after 4 seconds
   const setMessageWithAutoDismiss = (msg: string) => {
     setMessage(msg);
 
-    // Clear existing timeout
     if (messageTimeoutRef.current) {
       clearTimeout(messageTimeoutRef.current);
     }
 
-    // Auto-dismiss success messages (not error messages)
     if (msg && !msg.includes("Error")) {
       messageTimeoutRef.current = setTimeout(() => {
         setMessage("");
@@ -61,13 +56,11 @@ export function CollectionsPage() {
       if (filePath) {
         setMessageWithAutoDismiss(`Copying ${category} wallpaper...`);
 
-        // Copy the image to app data directory
         const copiedPath = await invoke("copy_wallpaper_image", {
           sourcePath: filePath,
           category: category,
         });
 
-        // Update setting with the copied path
         updateSetting(category, { imagePath: copiedPath as string });
         setMessageWithAutoDismiss(`${category} wallpaper updated!`);
       }
@@ -85,7 +78,6 @@ export function CollectionsPage() {
     updateSetting(category, { priority });
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (messageTimeoutRef.current) {
@@ -97,11 +89,9 @@ export function CollectionsPage() {
   const activeCollection = getActiveCollection();
   const hasSettings = Object.keys(settings).length > 0;
 
-  // Organize categories by type
   const weatherCategories = WALLPAPER_CATEGORIES.filter((cat) => ["thunderstorm", "rain", "snow", "fog", "cloudy", "sunny"].includes(cat.key));
 
   const timeCategories = WALLPAPER_CATEGORIES.filter((cat) => ["dawn", "morning", "midday", "afternoon", "dusk", "evening", "night", "late_night"].includes(cat.key)).sort((a, b) => {
-    // Define chronological order starting from dawn
     const timeOrder = ["dawn", "morning", "midday", "afternoon", "dusk", "evening", "night", "late_night"];
     return timeOrder.indexOf(a.key) - timeOrder.indexOf(b.key);
   });
@@ -110,7 +100,6 @@ export function CollectionsPage() {
 
   return (
     <div className="p-4 space-y-6 bg-bg-primary backdrop-blur-sm h-screen overflow-y-scroll">
-      {/* Header with Back Button */}
       <div className="flex items-center space-x-4 mb-6">
         <IconButton onClick={() => setCurrentPage("home")} variant="ghost" title="Back to Home" className="hover:scale-110 transition-transform duration-200">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,10 +109,8 @@ export function CollectionsPage() {
         <h1 className="text-xl font-bold text-text-primary">Collections</h1>
       </div>
 
-      {/* Collection Selector */}
       <CollectionSelector />
 
-      {/* Status Message */}
       {message && (
         <div className="animate-in slide-in-from-top duration-300">
           <Alert variant={message.includes("Error") ? "danger" : "success"} dismissible={true} onDismiss={() => setMessage("")} className="shadow-card-hover">
@@ -132,7 +119,6 @@ export function CollectionsPage() {
         </div>
       )}
 
-      {/* Wallpaper Cards with Tabs */}
       {hasSettings && activeCollection ? (
         <div className="space-y-6">
           <Card variant="info" padding="md" className="border-l-4 border-l-primary">
@@ -147,36 +133,34 @@ export function CollectionsPage() {
             </div>
           </Card>
 
-          {/* Tab Navigation */}
           <div className="transition-all duration-200 hover:scale-[1.005]">
             <TabBar
               variant="bordered"
-            tabs={[
-              {
-                id: "weather",
-                label: "Weather",
-                icon: "weather",
-                count: weatherCategories.length,
-              },
-              {
-                id: "time",
-                label: "Time",
-                icon: "time",
-                count: timeCategories.length,
-              },
-              {
-                id: "default",
-                label: "Default",
-                icon: "tools",
-                count: defaultCategories.length,
-              },
-            ]}
-            activeTab={activeTab}
-            onTabChange={(tabId) => setActiveTab(tabId as "weather" | "time" | "default")}
-          />
+              tabs={[
+                {
+                  id: "weather",
+                  label: "Weather",
+                  icon: "weather",
+                  count: weatherCategories.length,
+                },
+                {
+                  id: "time",
+                  label: "Time",
+                  icon: "time",
+                  count: timeCategories.length,
+                },
+                {
+                  id: "default",
+                  label: "Default",
+                  icon: "tools",
+                  count: defaultCategories.length,
+                },
+              ]}
+              activeTab={activeTab}
+              onTabChange={(tabId) => setActiveTab(tabId as "weather" | "time" | "default")}
+            />
           </div>
 
-          {/* Tab Content */}
           <div className="space-y-3 transition-all duration-300 ease-in-out">
             {activeTab === "weather" &&
               weatherCategories.map((categoryInfo) => {

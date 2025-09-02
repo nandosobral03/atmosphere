@@ -50,18 +50,16 @@ export interface CurrentConditions {
   active_categories: string[];
 }
 
-export interface TimePeriodDetails {
-  period: string;
-  start_time: string;
-  end_time: string;
-  description: string;
-  is_current: boolean;
-}
-
 export interface TimePeriodsResponse {
   sunrise: string;
   sunset: string;
-  periods: TimePeriodDetails[];
+  periods: {
+    period: string;
+    start_time: string;
+    end_time: string;
+    description: string;
+    is_current: boolean;
+  }[];
   location: string | null;
 }
 

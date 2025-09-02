@@ -4,6 +4,7 @@ import { save, open } from "@tauri-apps/plugin-dialog";
 import { SchedulerControl } from "../components/SchedulerControl";
 import { useNavigationStore } from "../store/navigationStore";
 import { useCollectionStore } from "../store/collectionStore";
+import { useThemeStore } from "../store/themeStore";
 import { Icon } from "../components/ui/Icon";
 import { Button } from "../components/ui/Button";
 
@@ -17,6 +18,7 @@ interface AppSettings {
 export function SettingsPage() {
   const { setCurrentPage } = useNavigationStore();
   const collectionStore = useCollectionStore();
+  const { theme, toggleTheme } = useThemeStore();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -370,6 +372,30 @@ export function SettingsPage() {
           </Button>
         </div>
       </div>
+
+      {/* Theme Settings */}
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Appearance</h3>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-surface/50 border border-border/50">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Icon name={theme === "dark" ? "night" : "sunny"} size={20} className="text-primary" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-text-primary cursor-pointer">Dark Mode</label>
+                <p className="text-xs text-text-secondary">{theme === "dark" ? "Currently using dark theme" : "Currently using light theme"}</p>
+              </div>
+            </div>
+            <button onClick={toggleTheme} className="relative inline-flex items-center cursor-pointer">
+              <div className={`w-12 h-6 rounded-full transition-colors ${theme === "dark" ? "bg-primary" : "bg-border"}`}>
+                <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${theme === "dark" ? "translate-x-7" : "translate-x-1"} mt-1`} />
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Scheduler Settings */}
 
       <SchedulerControl />

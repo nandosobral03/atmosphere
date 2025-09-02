@@ -5,7 +5,10 @@
       "Bash(bun add:*)",
       "Bash(cargo check:*)",
       "WebFetch(domain:v2.tauri.app)",
-      "Read(C:\\Users\\USUARIO\\Pictures\\Screenshots/**)"
+      "Read(C:\\Users\\USUARIO\\Pictures\\Screenshots/**)",
+      "Bash(npm install:*)",
+      "Bash(npx knip:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

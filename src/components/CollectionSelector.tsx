@@ -21,7 +21,6 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
   } | null>(null);
 
   const collectionList = Object.values(collections);
-  const activeCollection = activeCollectionId ? collections[activeCollectionId] : null;
 
   const handleCollectionChange = (collectionId: string) => {
     setActiveCollection(collectionId);

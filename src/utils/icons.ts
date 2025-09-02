@@ -1,6 +1,7 @@
 import { IconName } from '../components/ui/Icon';
 
-export const getConditionIconName = (condition: string): IconName => {
+// Legacy function for backwards compatibility - now returns icon name
+export const getConditionIcon = (condition: string): IconName => {
   const iconMap: Record<string, IconName> = {
     'thunderstorm': 'thunderstorm',
     'rain': 'rain',
@@ -21,9 +22,4 @@ export const getConditionIconName = (condition: string): IconName => {
   };
 
   return iconMap[condition] || 'partly-cloudy';
-};
-
-// Legacy function for backwards compatibility - now returns icon name
-export const getConditionIcon = (condition: string): IconName => {
-  return getConditionIconName(condition);
 };

@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { StatusDisplay } from "../components/StatusDisplay";
-import { Card, Button, Badge, StatusDot, CardSkeleton } from "../components/ui";
+import { Card, Badge, StatusDot } from "../components/ui";
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import { useCollectionInitializer } from "../hooks/useCollectionInitializer";
 import { useActiveCollectionSettings } from "../hooks/useActiveCollectionSettings";
-import { getCurrentActiveWallpaper } from "../utils/wallpaper";
 import { useCollectionStore } from "../store/collectionStore";
 import { Icon } from "../components/ui/Icon";
 import { useNavigationStore } from "../store/navigationStore";
@@ -28,9 +27,6 @@ export function HomePage() {
   const { getActiveCollection } = useCollectionStore();
   const { setCurrentPage } = useNavigationStore();
   const [schedulerStatus, setSchedulerStatus] = useState<SchedulerStatus | null>(null);
-  const [isToggling, setIsToggling] = useState(false);
-
-  const activeWallpaper = getCurrentActiveWallpaper(currentConditions, settings);
   const activeCollection = getActiveCollection();
 
   const fetchSchedulerStatus = async () => {
@@ -39,24 +35,6 @@ export function HomePage() {
       setSchedulerStatus(result);
     } catch (error) {
       console.error("Failed to fetch scheduler status:", error);
-    }
-  };
-
-  const toggleScheduler = async () => {
-    if (!schedulerStatus) return;
-
-    setIsToggling(true);
-    try {
-      if (schedulerStatus.enabled && schedulerStatus.is_running) {
-        await invoke("stop_wallpaper_scheduler");
-      } else {
-        await invoke("start_wallpaper_scheduler");
-      }
-      await fetchSchedulerStatus();
-    } catch (error) {
-      console.error("Failed to toggle scheduler:", error);
-    } finally {
-      setIsToggling(false);
     }
   };
 
@@ -152,12 +130,6 @@ export function HomePage() {
               <div className="h-4 bg-border rounded w-20 animate-pulse"></div>
               <div className="h-6 bg-border rounded w-16 animate-pulse"></div>
             </div>
-          </div>
-
-          <div className="space-y-2">
-            {[1, 2, 3].map((i) => (
-              <CardSkeleton key={i} />
-            ))}
           </div>
         </Card>
       )}

@@ -1,14 +1,13 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { IconName } from '../components/ui/Icon';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { IconName } from "../components/ui/Icon";
 
-export type PageType = 'home' | 'collections' | 'settings';
+export type PageType = "home" | "collections" | "settings";
 
 interface NavigationStore {
   currentPage: PageType;
   setCurrentPage: (page: PageType) => void;
-  
-  // Page metadata
+
   pages: {
     [K in PageType]: {
       title: string;
@@ -21,31 +20,31 @@ interface NavigationStore {
 export const useNavigationStore = create<NavigationStore>()(
   persist(
     (set) => ({
-      currentPage: 'home',
-      
+      currentPage: "home",
+
       setCurrentPage: (page: PageType) => set({ currentPage: page }),
-      
+
       pages: {
         home: {
-          title: 'Home',
-          icon: 'home',
-          description: 'Current status and overview'
+          title: "Home",
+          icon: "home",
+          description: "Current status and overview",
         },
         collections: {
-          title: 'Collections',
-          icon: 'gallery',
-          description: 'Wallpaper categories and settings'
+          title: "Collections",
+          icon: "gallery",
+          description: "Wallpaper categories and settings",
         },
         settings: {
-          title: 'Settings',
-          icon: 'settings',
-          description: 'App preferences and configuration'
-        }
-      }
+          title: "Settings",
+          icon: "settings",
+          description: "App preferences and configuration",
+        },
+      },
     }),
     {
-      name: 'navigation-store',
-      version: 1
+      name: "navigation-store",
+      version: 1,
     }
   )
 );
