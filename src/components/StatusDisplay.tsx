@@ -46,11 +46,11 @@ export function StatusDisplay({ currentConditions }: StatusDisplayProps) {
 
   if (!currentConditions) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
+      <div className="bg-card rounded-2xl p-4 mb-6 border border-border shadow-card">
         <div className="flex items-center justify-center py-4">
-          <div className="text-center text-gray-500 dark:text-gray-400">
+          <div className="text-center text-text-secondary">
             <div className="mb-2">
-              <Icon name="loading" size={24} className="text-gray-500 dark:text-gray-400 animate-spin" />
+              <Icon name="loading" size={24} className="text-text-secondary animate-spin" />
             </div>
             <div className="text-sm">Loading conditions...</div>
           </div>
@@ -60,22 +60,22 @@ export function StatusDisplay({ currentConditions }: StatusDisplayProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
+    <div className="bg-card rounded-2xl p-4 mb-6 border border-border shadow-card">
       {/* Main Status Row */}
       <div className="flex items-center space-x-4 mb-4">
         {/* Weather Icon & Temp */}
-        <div className="flex flex-col items-center bg-gray-50 dark:bg-gray-700 rounded-lg p-3 min-w-[80px]">
+        <div className="flex flex-col items-center bg-surface rounded-lg p-3 min-w-[80px]">
           <div className="mb-1">
             <Icon 
               name={currentConditions.weather_condition 
                 ? getConditionIcon(currentConditions.weather_condition.toLowerCase()) 
                 : getConditionIcon(currentConditions.time_period || "loading")}
               size={32} 
-              className="text-gray-700 dark:text-gray-300" 
+              className="text-text-primary" 
             />
           </div>
           {currentConditions.temperature && (
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+            <span className="text-sm font-semibold text-text-primary">
               {Math.round(currentConditions.temperature)}°
             </span>
           )}
@@ -83,27 +83,27 @@ export function StatusDisplay({ currentConditions }: StatusDisplayProps) {
 
         {/* Weather & Location Info */}
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-lg text-gray-900 dark:text-white capitalize leading-tight">
+          <div className="font-semibold text-lg text-text-primary capitalize leading-tight">
             {currentConditions.weather_condition || currentConditions.time_period}
           </div>
           {currentConditions.location && (
-            <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+            <div className="text-sm text-text-secondary flex items-center">
               <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
               </svg>
               {currentConditions.location}
             </div>
           )}
-          <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <div className="text-sm text-text-secondary mt-1">
             {currentDate} • {currentTime}
           </div>
         </div>
 
         {/* Additional Weather Info */}
         {currentConditions.humidity && (
-          <div className="text-center bg-gray-50 dark:bg-gray-700 rounded-lg p-2 min-w-[60px]">
-            <div className="text-xs text-gray-500 dark:text-gray-400">Humidity</div>
-            <div className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="text-center bg-surface rounded-lg p-2 min-w-[60px]">
+            <div className="text-xs text-text-secondary">Humidity</div>
+            <div className="text-sm font-semibold text-text-primary">
               {Math.round(currentConditions.humidity)}%
             </div>
           </div>
@@ -112,22 +112,22 @@ export function StatusDisplay({ currentConditions }: StatusDisplayProps) {
 
       {/* Sun Times Row */}
       {currentConditions.sunrise && currentConditions.sunset && (
-        <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-600">
+        <div className="flex justify-between items-center pt-3 border-t border-border">
           <div className="flex items-center space-x-2">
-            <Icon name="dawn" size={18} className="text-orange-500" />
+            <Icon name="dawn" size={18} className="text-primary" />
             <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Sunrise</div>
-              <div className="text-sm font-medium text-gray-900 dark:text-white">
+              <div className="text-xs text-text-secondary">Sunrise</div>
+              <div className="text-sm font-medium text-text-primary">
                 {formatTime(currentConditions.sunrise)}
               </div>
             </div>
           </div>
           
           <div className="flex items-center space-x-2">
-            <Icon name="evening" size={18} className="text-orange-600" />
+            <Icon name="evening" size={18} className="text-primary" />
             <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">Sunset</div>
-              <div className="text-sm font-medium text-gray-900 dark:text-white">
+              <div className="text-xs text-text-secondary">Sunset</div>
+              <div className="text-sm font-medium text-text-primary">
                 {formatTime(currentConditions.sunset)}
               </div>
             </div>

@@ -10,18 +10,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const buttonVariants = {
-  primary: 'bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white border-transparent',
-  secondary: 'bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-hover)] text-white border-transparent',
-  success: 'bg-[var(--color-success)] hover:bg-[var(--color-success-hover)] text-white border-transparent',
-  danger: 'bg-[var(--color-danger)] hover:bg-[var(--color-danger-hover)] text-white border-transparent',
-  ghost: 'bg-transparent hover:bg-[var(--color-gray-50)] dark:hover:bg-[var(--color-gray-700)] text-[var(--color-gray-700)] dark:text-[var(--color-gray-300)] border-[var(--color-gray-300)] dark:border-[var(--color-gray-600)]',
-  navigation: 'bg-[var(--color-white)] dark:bg-[var(--color-gray-800)] hover:bg-[var(--color-gray-50)] dark:hover:bg-[var(--color-gray-700)] text-[var(--color-gray-900)] dark:text-white border-[var(--color-gray-200)] dark:border-[var(--color-gray-700)]'
+  primary: 'bg-primary hover:bg-primary-hover text-text-inverse border-transparent',
+  secondary: 'bg-surface hover:bg-border text-text-primary border border-border',
+  success: 'bg-success hover:bg-success-hover text-text-inverse border-transparent',
+  danger: 'bg-danger hover:bg-danger-hover text-text-inverse border-transparent',
+  ghost: 'bg-transparent hover:bg-surface text-text-primary border-transparent',
+  navigation: 'bg-card hover:bg-surface text-text-primary border border-border'
 };
 
 const buttonSizes = {
-  sm: 'px-[var(--spacing-md)] py-[var(--spacing-xs)] text-[var(--font-size-xs)] font-medium',
-  md: 'px-[var(--spacing-lg)] py-[var(--spacing-sm)] text-[var(--font-size-sm)] font-medium',
-  lg: 'px-[var(--spacing-2xl)] py-[var(--spacing-md)] text-[var(--font-size-md)] font-semibold'
+  sm: 'px-3 py-1.5 text-sm font-medium',
+  md: 'px-4 py-2 text-sm font-medium',
+  lg: 'px-8 py-3 text-sm font-semibold'
 };
 
 export function Button({
@@ -33,7 +33,7 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center rounded-[var(--radius-lg)] border transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-[var(--color-gray-400)]';
+  const baseClasses = 'inline-flex items-center justify-center rounded-xl border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-border disabled:text-text-secondary';
   
   const variantClasses = buttonVariants[variant];
   const sizeClasses = buttonSizes[size];

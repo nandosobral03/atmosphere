@@ -67,7 +67,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="p-4 h-full flex flex-col">
+    <div className="p-4 h-full flex flex-col bg-bg-primary backdrop-blur-sm">
       {/* Status Display */}
       <StatusDisplay currentConditions={currentConditions} />
 
@@ -75,17 +75,10 @@ export function HomePage() {
       {currentConditions ? (
         <Card className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Wallpaper Status</h3>
+            <h3 className="font-semibold text-text-primary">Wallpaper Status</h3>
             <div className="flex items-center space-x-3">
-              {activeCollection && (
-                <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {activeCollection.name}
-                </div>
-              )}
-              <Badge
-                variant={schedulerStatus?.enabled && schedulerStatus?.is_running ? "success" : "secondary"}
-                size="sm"
-              >
+              {activeCollection && <div className="text-xs text-text-secondary">{activeCollection.name}</div>}
+              <Badge variant={schedulerStatus?.enabled && schedulerStatus?.is_running ? "success" : "secondary"} size="sm">
                 Auto: {schedulerStatus?.enabled && schedulerStatus?.is_running ? "ON" : "OFF"}
               </Badge>
             </div>
@@ -104,7 +97,7 @@ export function HomePage() {
                 .sort((a, b) => b.setting.priority - a.setting.priority); // Highest priority first
 
               if (potentialWallpapers.length === 0) {
-                return <div className="text-gray-500 dark:text-gray-400 text-sm">No enabled wallpapers for current conditions</div>;
+                return <div className="text-text-secondary text-sm">No enabled wallpapers for current conditions</div>;
               }
 
               // Since we only show wallpapers with images, the first (highest priority) one is active
@@ -113,12 +106,7 @@ export function HomePage() {
                 const hasImage = true; // All items in this list have images due to filtering
 
                 return (
-                  <Card
-                    key={category}
-                    variant={isActive ? "success" : hasImage ? "info" : "default"}
-                    padding="md"
-                    className="flex items-center space-x-3"
-                  >
+                  <Card key={category} variant={isActive ? "success" : hasImage ? "info" : "default"} padding="md" className="flex items-center space-x-3">
                     {/* Thumbnail for active wallpaper */}
                     {isActive && hasImage && (
                       <div className="w-16 aspect-video rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600 flex-shrink-0">
@@ -135,19 +123,17 @@ export function HomePage() {
                         <div className="hidden w-full h-full flex items-center justify-center text-gray-400 text-xs">No Preview</div>
                       </div>
                     )}
-                    
+
                     <StatusDot variant={isActive ? "success" : hasImage ? "info" : "inactive"} />
-                    
+
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center space-x-2">
-                        <div className={`text-sm font-medium ${isActive ? "text-green-900 dark:text-green-100" : "text-gray-900 dark:text-white"}`}>
-                          {info?.label || category}
-                        </div>
+                        <div className={`text-sm font-medium ${isActive ? "text-success" : "text-text-primary"}`}>{info?.label || category}</div>
                         <Badge variant={isActive ? "success" : "info"} size="xs">
                           {isActive ? "ACTIVE" : "READY"}
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <div className="text-xs text-text-secondary">
                         Priority: {setting.priority} • #{index + 1}
                       </div>
                     </div>
@@ -161,13 +147,13 @@ export function HomePage() {
         /* Skeleton Loader for Wallpaper Status */
         <Card className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
+            <div className="h-5 bg-border rounded w-32 animate-pulse"></div>
             <div className="flex items-center space-x-3">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 animate-pulse"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
+              <div className="h-4 bg-border rounded w-20 animate-pulse"></div>
+              <div className="h-6 bg-border rounded w-16 animate-pulse"></div>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
               <CardSkeleton key={i} />
@@ -181,23 +167,29 @@ export function HomePage() {
 
       {/* Bento Box Navigation */}
       <div className="grid grid-cols-2 gap-4">
-        <button onClick={() => setCurrentPage("collections")} className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+        <button
+          onClick={() => setCurrentPage("collections")}
+          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-200 ease-in-out group hover:-translate-y-0.5 hover:scale-[1.005] shadow-card hover:shadow-card-hover"
+        >
           <div className="text-center">
-            <div className="mb-3 group-hover:scale-110 transition-transform">
-              <Icon name="palette" size={36} className="text-gray-600 dark:text-gray-300" />
+            <div className="mb-3 group-hover:scale-110 transition-transform flex justify-center">
+              <Icon name="palette" size={36} className="text-text-primary" />
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Collections</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Manage wallpaper collections</p>
+            <h3 className="font-semibold mb-1 text-text-primary text-body-large">Collections</h3>
+            <p className="text-text-secondary text-body-small">Manage wallpaper collections</p>
           </div>
         </button>
 
-        <button onClick={() => setCurrentPage("settings")} className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+        <button
+          onClick={() => setCurrentPage("settings")}
+          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-200 ease-in-out group hover:-translate-y-0.5 hover:scale-[1.005] shadow-card hover:shadow-card-hover"
+        >
           <div className="text-center">
-            <div className="mb-3 group-hover:scale-110 transition-transform">
-              <Icon name="settings" size={36} className="text-gray-600 dark:text-gray-300" />
+            <div className="mb-3 group-hover:scale-110 transition-transform flex justify-center">
+              <Icon name="settings" size={36} className="text-text-primary" />
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Settings</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Configure app preferences</p>
+            <h3 className="font-semibold mb-1 text-text-primary text-body-large">Settings</h3>
+            <p className="text-text-secondary text-body-small">Configure app preferences</p>
           </div>
         </button>
       </div>

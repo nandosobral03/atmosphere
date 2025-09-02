@@ -58,8 +58,8 @@ export function SchedulerControl() {
 
   if (!status) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-        <div className="text-center text-gray-500 dark:text-gray-400">
+      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
+        <div className="text-center text-text-secondary">
           Loading scheduler status...
         </div>
       </div>
@@ -67,28 +67,28 @@ export function SchedulerControl() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+    <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-text-primary">
           Auto Wallpaper
         </h3>
         <div className={`px-2 py-1 rounded-full text-xs font-medium ${
           status.enabled && status.is_running 
-            ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300'
-            : 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300'
+            ? 'bg-success-light text-success-hover'
+            : 'bg-danger-light text-danger-hover'
         }`}>
           {status.enabled && status.is_running ? 'ACTIVE' : 'INACTIVE'}
         </div>
       </div>
 
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      <p className="text-sm text-text-secondary mb-4">
         Automatically changes wallpaper based on weather and time conditions
       </p>
 
       <div className="space-y-4">
         {/* Interval Control */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             Check Interval: {intervalMinutes} minutes
           </label>
           <input
@@ -98,9 +98,9 @@ export function SchedulerControl() {
             value={intervalMinutes}
             onChange={(e) => setIntervalMinutes(parseInt(e.target.value))}
             disabled={status.enabled && status.is_running}
-            className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider disabled:cursor-not-allowed"
+            className="w-full h-2 bg-surface rounded-full appearance-none cursor-pointer slider disabled:cursor-not-allowed"
           />
-          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <div className="flex justify-between text-xs text-text-secondary mt-1">
             <span>1 min</span>
             <span>15 min</span>
             <span>30 min</span>
@@ -113,7 +113,7 @@ export function SchedulerControl() {
             <button
               onClick={stopScheduler}
               disabled={isLoading}
-              className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors disabled:cursor-not-allowed"
+              className="flex-1 bg-danger hover:bg-danger-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
             >
               {isLoading ? "Stopping..." : "Stop Auto Wallpaper"}
             </button>
@@ -121,7 +121,7 @@ export function SchedulerControl() {
             <button
               onClick={startScheduler}
               disabled={isLoading}
-              className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors disabled:cursor-not-allowed"
+              className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
             >
               {isLoading ? "Starting..." : "Start Auto Wallpaper"}
             </button>
@@ -130,16 +130,16 @@ export function SchedulerControl() {
           <button
             onClick={fetchStatus}
             disabled={isLoading}
-            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white rounded-lg text-sm transition-colors disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
             title="Refresh status"
           >
-            <Icon name="loading" size={16} className="text-white" />
+            <Icon name="loading" size={16} className="text-text-inverse" />
           </button>
         </div>
 
         {/* Status Info */}
         {status.last_applied_path && (
-          <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded">
+          <div className="text-xs text-text-secondary bg-surface p-2 rounded">
             <span className="font-medium">Last applied:</span> {status.last_applied_path.split('\\').pop()}
           </div>
         )}

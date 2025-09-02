@@ -11,27 +11,27 @@ export interface CardProps {
 }
 
 const cardVariants = {
-  default: 'bg-[var(--color-white)] dark:bg-[var(--color-gray-800)] border-[var(--color-gray-200)] dark:border-[var(--color-gray-700)]',
-  highlighted: 'bg-[var(--color-primary-light)] dark:bg-[var(--color-primary-dark)] border-[var(--color-primary)] dark:border-[var(--color-primary)]',
-  status: 'bg-[var(--color-primary-light)] dark:bg-[var(--color-primary-dark)] border-[var(--color-primary-hover)] dark:border-[var(--color-primary)]',
-  info: 'bg-[var(--color-info-light)] dark:bg-[var(--color-info-dark)] border-[var(--color-info-hover)] dark:border-[var(--color-info)]',
-  success: 'bg-[var(--color-success-light)] dark:bg-[var(--color-success-dark)] border-[var(--color-success-hover)] dark:border-[var(--color-success)]',
-  warning: 'bg-[var(--color-warning-light)] dark:bg-[var(--color-warning-dark)] border-[var(--color-warning-hover)] dark:border-[var(--color-warning)]',
-  danger: 'bg-[var(--color-danger-light)] dark:bg-[var(--color-danger-dark)] border-[var(--color-danger-hover)] dark:border-[var(--color-danger)]',
-  editing: 'bg-[var(--color-warning-light)] dark:bg-[var(--color-warning-dark)] border-[var(--color-warning-hover)] dark:border-[var(--color-warning)]'
+  default: 'bg-card border-border',
+  highlighted: 'bg-primary-light border-primary',
+  status: 'bg-primary-light border-primary-hover',
+  info: 'bg-info-light border-info-hover',
+  success: 'bg-success-light border-success-hover',
+  warning: 'bg-warning-light border-warning-hover',
+  danger: 'bg-danger-light border-danger-hover',
+  editing: 'bg-warning-light border-warning-hover'
 };
 
 const cardPadding = {
-  sm: 'p-[var(--spacing-md)]', // p-3
-  md: 'p-[var(--spacing-lg)]', // p-4
-  lg: 'p-[var(--spacing-2xl)]' // p-6
+  sm: 'p-3',
+  md: 'p-4', 
+  lg: 'p-6'
 };
 
 const cardShadows = {
   none: '',
-  sm: 'shadow-[var(--shadow-sm)]',
-  md: 'shadow-[var(--shadow-md)]',
-  lg: 'shadow-[var(--shadow-lg)]'
+  sm: 'shadow-card',
+  md: 'shadow-card-hover',
+  lg: 'shadow-card-hover'
 };
 
 export function Card({
@@ -42,7 +42,7 @@ export function Card({
   className = '',
   children
 }: CardProps) {
-  const baseClasses = 'rounded-[var(--radius-lg)] transition-all';
+  const baseClasses = 'rounded-2xl transition-all';
   const variantClasses = cardVariants[variant];
   const paddingClasses = cardPadding[padding];
   const borderClasses = border ? 'border' : '';

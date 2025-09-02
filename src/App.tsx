@@ -4,6 +4,7 @@ import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { IconSprite } from "./components/IconSprite";
+import { BackgroundShapes } from "./components/BackgroundShapes";
 import "./App.css";
 
 function App() {
@@ -26,9 +27,12 @@ function App() {
   };
 
   return (
-    <main className="h-screen bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+    <main 
+      className="h-screen overflow-y-auto bg-bg-gradient relative"
+    >
       <IconSprite />
-      <div className="max-w-md mx-auto h-full">
+      <BackgroundShapes />
+      <div className="max-w-md mx-auto h-full relative z-10">
         {renderCurrentPage()}
       </div>
     </main>
