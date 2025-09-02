@@ -4,6 +4,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { WallpaperCard } from "../components/WallpaperCard";
 import { CollectionSelector } from "../components/CollectionSelector";
 import { Button, Card, Alert, TabBar, IconButton } from "../components/ui";
+import { Icon } from "../components/ui/Icon";
 import { useCurrentConditions } from "../hooks/useCurrentConditions";
 import { useTimePeriods } from "../hooks/useTimePeriods";
 import { useCollectionInitializer } from "../hooks/useCollectionInitializer";
@@ -108,15 +109,15 @@ export function CollectionsPage() {
   const defaultCategories = WALLPAPER_CATEGORIES.filter((cat) => cat.key === "default");
 
   return (
-    <div className="p-4 space-y-4 bg-bg-primary backdrop-blur-sm min-h-screen">
+    <div className="p-4 space-y-6 bg-bg-primary backdrop-blur-sm h-screen overflow-y-scroll">
       {/* Header with Back Button */}
-      <div className="flex items-center space-x-3 mb-4">
-        <IconButton onClick={() => setCurrentPage("home")} variant="ghost" title="Back to Home">
+      <div className="flex items-center space-x-4 mb-6">
+        <IconButton onClick={() => setCurrentPage("home")} variant="ghost" title="Back to Home" className="hover:scale-110 transition-transform duration-200">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </IconButton>
-        <span className="text-sm font-medium text-text-primary">Collections</span>
+        <h1 className="text-xl font-bold text-text-primary">Collections</h1>
       </div>
 
       {/* Collection Selector */}
@@ -124,22 +125,32 @@ export function CollectionsPage() {
 
       {/* Status Message */}
       {message && (
-        <Alert variant={message.includes("Error") ? "danger" : "success"} dismissible={true} onDismiss={() => setMessage("")}>
-          {message}
-        </Alert>
+        <div className="animate-in slide-in-from-top duration-300">
+          <Alert variant={message.includes("Error") ? "danger" : "success"} dismissible={true} onDismiss={() => setMessage("")} className="shadow-card-hover">
+            {message}
+          </Alert>
+        </div>
       )}
 
       {/* Wallpaper Cards with Tabs */}
       {hasSettings && activeCollection ? (
-        <div className="space-y-4">
-          <Card variant="info" padding="sm">
-            <h3 className="text-sm font-medium text-text-primary mb-1">Editing: {activeCollection.name}</h3>
-            <p className="text-xs text-text-secondary">Configure wallpapers for different weather conditions and times of day</p>
+        <div className="space-y-6">
+          <Card variant="info" padding="md" className="border-l-4 border-l-primary">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-xl bg-primary/20">
+                <Icon name="palette" size={16} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-text-primary mb-1">Editing: {activeCollection.name}</h3>
+                <p className="text-xs text-text-secondary leading-relaxed">Configure wallpapers for different weather conditions and times of day</p>
+              </div>
+            </div>
           </Card>
 
           {/* Tab Navigation */}
-          <TabBar
-            variant="bordered"
+          <div className="transition-all duration-200 hover:scale-[1.005]">
+            <TabBar
+              variant="bordered"
             tabs={[
               {
                 id: "weather",
@@ -163,9 +174,10 @@ export function CollectionsPage() {
             activeTab={activeTab}
             onTabChange={(tabId) => setActiveTab(tabId as "weather" | "time" | "default")}
           />
+          </div>
 
           {/* Tab Content */}
-          <div className="space-y-4">
+          <div className="space-y-3 transition-all duration-300 ease-in-out">
             {activeTab === "weather" &&
               weatherCategories.map((categoryInfo) => {
                 const setting = settings[categoryInfo.key];
@@ -228,7 +240,19 @@ export function CollectionsPage() {
           </div>
         </div>
       ) : (
-        <div className="text-center text-text-secondary py-8">{!activeCollection ? "Select or create a collection to start configuring wallpapers." : "Loading collection settings..."}</div>
+        <Card className="text-center py-12">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="p-4 rounded-2xl bg-primary/10">
+              {!activeCollection ? <Icon name="palette" size={48} className="text-primary/60" /> : <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>}
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium text-text-primary">{!activeCollection ? "No Collection Selected" : "Loading Collection"}</h3>
+              <p className="text-sm text-text-secondary leading-relaxed max-w-sm">
+                {!activeCollection ? "Select or create a collection above to start configuring wallpapers for different weather conditions and times of day." : "Loading collection settings and wallpaper configurations..."}
+              </p>
+            </div>
+          </div>
+        </Card>
       )}
     </div>
   );

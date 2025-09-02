@@ -113,7 +113,7 @@ export function SchedulerControl() {
             <button
               onClick={stopScheduler}
               disabled={isLoading}
-              className="flex-1 bg-danger hover:bg-danger-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
+              className="flex-1 bg-danger hover:bg-danger-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? "Stopping..." : "Stop Auto Wallpaper"}
             </button>
@@ -121,7 +121,7 @@ export function SchedulerControl() {
             <button
               onClick={startScheduler}
               disabled={isLoading}
-              className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
+              className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? "Starting..." : "Start Auto Wallpaper"}
             </button>
@@ -130,7 +130,7 @@ export function SchedulerControl() {
           <button
             onClick={fetchStatus}
             disabled={isLoading}
-            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse rounded-xl text-sm transition-colors disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             title="Refresh status"
           >
             <Icon name="loading" size={16} className="text-text-inverse" />

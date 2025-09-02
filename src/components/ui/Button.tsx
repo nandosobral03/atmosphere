@@ -33,7 +33,7 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center rounded-xl border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-border disabled:text-text-secondary';
+  const baseClasses = 'inline-flex items-center justify-center rounded-xl border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-border disabled:text-text-secondary cursor-pointer';
   
   const variantClasses = buttonVariants[variant];
   const sizeClasses = buttonSizes[size];

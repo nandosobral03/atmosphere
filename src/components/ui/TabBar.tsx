@@ -58,11 +58,11 @@ export function TabBar({
         const isDisabled = tab.disabled;
 
         const tabClasses = `
-          flex-1 font-medium transition-colors text-center
+          flex-1 font-medium transition-colors text-center cursor-pointer
           ${variantConfig.tab}
           ${isActive ? variantConfig.active : variantConfig.inactive}
           ${sizeClasses}
-          ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+          ${isDisabled ? 'cursor-not-allowed opacity-50' : ''}
           ${variant === 'bordered' && index > 0 ? 'border-l' : ''}
         `.trim();
 

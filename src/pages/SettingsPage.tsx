@@ -234,62 +234,94 @@ export function SettingsPage() {
       )}
 
       {/* Header with Back Button */}
-      <div className="flex items-center space-x-3 mb-4">
-        <button onClick={() => setCurrentPage("home")} className="p-2 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface transition-colors" title="Back to Home">
+      <div className="flex items-center space-x-3 mb-6">
+        <button onClick={() => setCurrentPage("home")} className="p-2 rounded-xl text-text-primary hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer border border-border hover:border-primary" title="Back to Home">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <span className="text-sm font-medium text-text-primary">Settings</span>
+        <h1 className="text-xl font-bold text-text-primary">Settings</h1>
       </div>
 
       {/* Status Message */}
       {message && (
         <div
-          className={`p-3 rounded-2xl text-sm font-medium transition-all duration-300 ${
+          className={`p-4 rounded-2xl text-sm font-medium transition-all duration-300 animate-in slide-in-from-top shadow-sm ${
             message.includes("Error") || message.includes("failed") ? "bg-danger-light text-danger-hover border border-danger" : "bg-success-light text-success-hover border border-success"
           }`}
         >
-          <div className="break-words text-center">{message}</div>
+          <div className="break-words text-center flex items-center justify-center space-x-2">
+            <Icon name={message.includes("Error") || message.includes("failed") ? "settings" : "check"} size={16} />
+            <span>{message}</span>
+          </div>
         </div>
       )}
 
       {/* Weather API Settings */}
-      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
-        <h3 className="text-lg font-semibold text-text-primary mb-3">Weather API Configuration</h3>
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Weather API Configuration</h3>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-text-primary mb-2">
               WeatherAPI.com API Key <span className="text-danger">*</span>
             </label>
-            <div className="flex space-x-2">
+            <div className="flex space-x-3">
               <input
                 type="password"
                 value={settings.weather_api_key}
                 onChange={(e) => setSettings({ ...settings, weather_api_key: e.target.value })}
                 placeholder="Enter your WeatherAPI.com key"
-                className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
-              <Button onClick={testApiKey} disabled={isLoading}>
-                Test
+              <Button onClick={testApiKey} disabled={isLoading} size="md">
+                {isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                    <span>Testing...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Icon name="check" size={16} />
+                    <span>Test</span>
+                  </div>
+                )}
               </Button>
             </div>
-            <p className="text-xs text-text-secondary mt-1">
+            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
               Get a free API key at{" "}
-              <a href="https://www.weatherapi.com/signup.aspx" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-hover">
+              <a href="https://www.weatherapi.com/signup.aspx" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-hover underline">
                 weatherapi.com/signup
               </a>{" "}
               (1M calls/month free)
             </p>
           </div>
         </div>
+
+        {/* Save API Key Button */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+            {isLoading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                <span>Saving API Settings...</span>
+              </div>
+            ) : isImporting ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                <span>Import in Progress...</span>
+              </div>
+            ) : (
+              "Save API Settings"
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Location Settings */}
-      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
-        <h3 className="text-lg font-semibold text-text-primary mb-3">Location Settings</h3>
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Location Settings</h3>
         <div className="space-y-4">
-          <div className="flex items-center">
+          <div className="flex items-center p-3 rounded-xl bg-surface/50 border border-border/50">
             <input
               id="auto-location"
               type="checkbox"
@@ -297,13 +329,13 @@ export function SettingsPage() {
               onChange={(e) => setSettings({ ...settings, use_auto_location: e.target.checked })}
               className="w-4 h-4 text-white bg-card border border-border rounded-md focus:ring-primary focus:ring-2 accent-primary"
             />
-            <label htmlFor="auto-location" className="ml-2 text-sm font-medium text-text-primary">
+            <label htmlFor="auto-location" className="ml-3 text-sm font-medium text-text-primary cursor-pointer">
               Auto-detect location via IP address
             </label>
           </div>
 
           {!settings.use_auto_location && (
-            <div>
+            <div className="animate-in slide-in-from-top duration-300">
               <label className="block text-sm font-medium text-text-primary mb-2">
                 Custom Location <span className="text-danger">*</span>
               </label>
@@ -312,32 +344,46 @@ export function SettingsPage() {
                 value={settings.location}
                 onChange={(e) => setSettings({ ...settings, location: e.target.value })}
                 placeholder="e.g., New York, London, 40.7128,-74.0060"
-                className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
-              <p className="text-xs text-text-secondary mt-1">City name, coordinates (lat,lon), or airport code</p>
+              <p className="text-xs text-text-secondary mt-2 leading-relaxed">City name, coordinates (lat,lon), or airport code</p>
             </div>
           )}
         </div>
-      </div>
 
-      {/* Save Button */}
-      <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full">
-        {isLoading ? "Saving..." : isImporting ? "Import in Progress..." : "Save Settings"}
-      </Button>
+        {/* Save Location Button */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+            {isLoading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                <span>Saving Location Settings...</span>
+              </div>
+            ) : isImporting ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                <span>Import in Progress...</span>
+              </div>
+            ) : (
+              "Save Location Settings"
+            )}
+          </Button>
+        </div>
+      </div>
       {/* Scheduler Settings */}
 
       <SchedulerControl />
 
       {/* Cache Management */}
-      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
-        <h3 className="text-lg font-semibold text-text-primary mb-3">Cache Management</h3>
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Cache Management</h3>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-text-primary mb-2">Cache Duration</label>
             <select
               value={settings.cache_duration_minutes}
               onChange={(e) => setSettings({ ...settings, cache_duration_minutes: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
             >
               <option value={5}>5 minutes</option>
               <option value={10}>10 minutes</option>
@@ -345,25 +391,27 @@ export function SettingsPage() {
               <option value={45}>45 minutes</option>
               <option value={60}>60 minutes</option>
             </select>
-            <p className="text-xs text-text-secondary mt-1">Weather data is cached to reduce API calls. Shorter duration = more up-to-date data but more API usage.</p>
+            <p className="text-xs text-text-secondary mt-2 leading-relaxed">Weather data is cached to reduce API calls. Shorter duration = more up-to-date data but more API usage.</p>
           </div>
           <div>
-            <Button onClick={clearWeatherCache}>Clear Weather Cache</Button>
+            <Button onClick={clearWeatherCache} variant="secondary" className="shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+              Clear Weather Cache
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Backup & Restore */}
-      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
-        <h3 className="text-lg font-semibold text-text-primary mb-3">Backup & Restore</h3>
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Backup & Restore</h3>
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-text-secondary mb-3">Export your settings and wallpapers to a backup file, or restore from a previous backup.</p>
-            <div className="flex space-x-3">
+            <p className="text-sm text-text-secondary mb-4 leading-relaxed">Export your settings and wallpapers to a backup file, or restore from a previous backup.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={exportBackup}
                 disabled={isImporting}
-                className="bg-primary hover:bg-primary-hover disabled:bg-border disabled:cursor-not-allowed text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors flex items-center space-x-2"
+                className="bg-primary hover:bg-primary-hover disabled:bg-border disabled:cursor-not-allowed text-text-inverse font-medium py-3 px-4 rounded-xl text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Icon name="upload" size={16} className="text-text-inverse" />
                 <span>Export Backup</span>
@@ -371,7 +419,7 @@ export function SettingsPage() {
               <button
                 onClick={importBackup}
                 disabled={isImporting}
-                className="bg-primary hover:bg-primary-hover disabled:bg-border disabled:cursor-not-allowed text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors flex items-center space-x-2"
+                className="bg-primary hover:bg-primary-hover disabled:bg-border disabled:cursor-not-allowed text-text-inverse font-medium py-3 px-4 rounded-xl text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md flex items-center justify-center space-x-2 cursor-pointer"
               >
                 {isImporting ? (
                   <>
@@ -386,9 +434,14 @@ export function SettingsPage() {
                 )}
               </button>
             </div>
-            <p className="text-xs text-text-secondary mt-2">
-              <strong>Note:</strong> Importing will replace your current settings and collections. Make sure to export a backup first!
-            </p>
+            <div className="mt-4 p-3 bg-warning-light/30 border border-warning/20 rounded-xl">
+              <div className="flex items-start space-x-2">
+                <Icon name="settings" size={16} className="text-warning mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  <strong className="text-warning">Important:</strong> Importing will replace your current settings and collections. Make sure to export a backup first!
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

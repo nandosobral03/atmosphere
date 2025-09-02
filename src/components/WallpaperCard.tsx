@@ -21,10 +21,10 @@ const TIME_BASED_CATEGORIES = ["dawn", "morning", "midday", "afternoon", "dusk",
 const getCategoryIcon = (categoryKey: string): string => {
   // Direct mappings for most categories
   const iconMap: Record<string, string> = {
-    'late_night': 'late-night',
-    'partly_cloudy': 'partly-cloudy'
+    late_night: "late-night",
+    partly_cloudy: "partly-cloudy",
   };
-  
+
   // Use mapped icon if available, otherwise use the category key directly
   return iconMap[categoryKey] || categoryKey;
 };
@@ -37,15 +37,7 @@ export function WallpaperCard({ categoryInfo, setting, currentConditions, timePe
   const isCurrentButNotActive = isCurrentlyActive && !isActiveWallpaper && setting.enabled && !!setting.imagePath;
 
   return (
-    <div
-      className={`border rounded-2xl p-4 shadow-card transition-all ${
-        isActiveWallpaper
-          ? "bg-card border-primary"
-          : isCurrentButNotActive
-          ? "bg-warning-light border-warning"
-          : "bg-card border-border"
-      }`}
-    >
+    <div className={`border rounded-2xl p-4 shadow-card transition-all ${isActiveWallpaper ? "bg-card border-primary" : isCurrentButNotActive ? "bg-warning-light border-warning" : "bg-card border-border"}`}>
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-0.5">
@@ -99,19 +91,17 @@ export function WallpaperCard({ categoryInfo, setting, currentConditions, timePe
             {setting.imagePath ? (
               <div className="space-y-2">
                 <div className="w-full aspect-video rounded-xl overflow-hidden bg-surface">
-                  <img 
+                  <img
                     src={convertFileSrc(setting.imagePath)}
                     alt={`${categoryInfo.label} wallpaper`}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      target.nextElementSibling?.classList.remove('hidden');
+                      target.style.display = "none";
+                      target.nextElementSibling?.classList.remove("hidden");
                     }}
                   />
-                  <div className="hidden w-full h-full flex items-center justify-center text-text-secondary text-sm">
-                    Preview unavailable
-                  </div>
+                  <div className="hidden w-full h-full flex items-center justify-center text-text-secondary text-sm">Preview unavailable</div>
                 </div>
                 <div className="flex justify-between items-center p-2 bg-success-light border border-success rounded-lg">
                   <span className="text-success-hover font-medium text-xs flex items-center gap-1">
@@ -124,7 +114,7 @@ export function WallpaperCard({ categoryInfo, setting, currentConditions, timePe
                 </div>
               </div>
             ) : (
-              <button onClick={() => onFileSelect(categoryInfo.key)} className="w-full bg-primary hover:bg-primary-hover text-text-inverse font-medium py-2 px-3 rounded-xl text-sm transition-colors">
+              <button onClick={() => onFileSelect(categoryInfo.key)} className="w-full bg-primary hover:bg-primary-hover text-text-inverse font-medium py-2 px-3 rounded-xl text-sm transition-colors cursor-pointer">
                 Select Image
               </button>
             )}

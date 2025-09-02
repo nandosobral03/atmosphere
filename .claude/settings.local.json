@@ -4,7 +4,8 @@
       "Bash(dir)",
       "Bash(bun add:*)",
       "Bash(cargo check:*)",
-      "WebFetch(domain:v2.tauri.app)"
+      "WebFetch(domain:v2.tauri.app)",
+      "Read(C:\\Users\\USUARIO\\Pictures\\Screenshots/**)"
     ],
     "deny": [],
     "ask": []

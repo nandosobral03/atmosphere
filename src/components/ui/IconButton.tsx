@@ -29,7 +29,7 @@ export function IconButton({
   children,
   ...props
 }: IconButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50';
+  const baseClasses = 'inline-flex items-center justify-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer';
   
   const variantClasses = iconButtonVariants[variant];
   const sizeClasses = iconButtonSizes[size];
