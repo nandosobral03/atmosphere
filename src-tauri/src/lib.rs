@@ -3,7 +3,7 @@ mod modules;
 use modules::greet::greet;
 use modules::weather::{get_current_conditions, get_time_periods, clear_weather_cache};
 use modules::wallpaper::{set_wallpaper, copy_wallpaper_image, cleanup_unused_wallpapers};
-use modules::scheduler::{start_wallpaper_scheduler, stop_wallpaper_scheduler, get_scheduler_status, initialize_scheduler};
+use modules::scheduler::{start_wallpaper_scheduler, stop_wallpaper_scheduler, get_scheduler_status, initialize_scheduler, update_scheduler_collection_data};
 use modules::settings::{get_app_settings, save_app_settings_cmd, test_weather_api};
 use modules::backup::{export_backup, import_backup, write_backup_file, read_backup_file, get_backup_collections_data};
 use tauri::{tray::TrayIconBuilder, Manager};
@@ -67,6 +67,7 @@ pub fn run() {
             stop_wallpaper_scheduler,
             get_scheduler_status,
             initialize_scheduler,
+            update_scheduler_collection_data,
             get_app_settings,
             save_app_settings_cmd,
             test_weather_api,

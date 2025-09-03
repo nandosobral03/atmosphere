@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigationStore } from "./store/navigationStore";
 import { useThemeStore } from "./store/themeStore";
 import { useSchedulerInitialization } from "./hooks/useSchedulerInitialization";
+import { useSchedulerSync } from "./hooks/useSchedulerSync";
 import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
 import { SettingsPage } from "./pages/SettingsPage";
@@ -14,6 +15,7 @@ function App() {
   const { theme } = useThemeStore();
 
   useSchedulerInitialization();
+  useSchedulerSync();
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
