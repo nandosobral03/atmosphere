@@ -8,7 +8,8 @@
       "Read(C:\\Users\\USUARIO\\Pictures\\Screenshots/**)",
       "Bash(npm install:*)",
       "Bash(npx knip:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
