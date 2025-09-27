@@ -9,9 +9,13 @@
       "Bash(npm install:*)",
       "Bash(npx knip:*)",
       "Bash(npm uninstall:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:www.weatherapi.com)",
+      "WebFetch(domain:choosealicense.com)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "default",
+  "spinnerTipsEnabled": true
 }
