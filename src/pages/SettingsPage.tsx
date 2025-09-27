@@ -10,6 +10,7 @@ import { Button } from "../components/ui/Button";
 
 interface AppSettings {
   weather_api_key: string;
+  gemini_api_key: string;
   location: string;
   use_auto_location: boolean;
   cache_duration_minutes: number;
@@ -24,6 +25,7 @@ export function SettingsPage() {
   const [isImporting, setIsImporting] = useState(false);
   const [settings, setSettings] = useState<AppSettings>({
     weather_api_key: "",
+    gemini_api_key: "",
     location: "",
     use_auto_location: true,
     cache_duration_minutes: 60,
@@ -44,23 +46,69 @@ export function SettingsPage() {
     }
   };
 
-  const saveSettings = async () => {
-    if (!settings.weather_api_key.trim()) {
-      setMessageWithAutoDismiss("Weather API key is required", true);
-      return;
+  const saveSettings = async (showMessage = true) => {
+    // Skip validation for auto-save, just save what we have
+    setIsLoading(true);
+    try {
+      await invoke("save_app_settings_cmd", { settings });
+      if (showMessage) {
+        setMessageWithAutoDismiss("Settings saved successfully!");
+      }
+    } catch (error) {
+      if (showMessage) {
+        setMessageWithAutoDismiss(`Error saving settings: ${error}`, true);
+      }
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    if (!settings.use_auto_location && !settings.location.trim()) {
-      setMessageWithAutoDismiss("Location is required when auto-location is disabled", true);
+  const handleWeatherApiKeyBlur = async () => {
+    if (settings.weather_api_key.trim()) {
+      await saveSettings(false);
+    }
+  };
+
+  const handleGeminiApiKeyBlur = async () => {
+    if (settings.gemini_api_key.trim()) {
+      await saveSettings(false);
+    }
+  };
+
+  const handleLocationBlur = async () => {
+    if (!settings.use_auto_location && settings.location.trim()) {
+      await saveSettings(false);
+    } else if (settings.use_auto_location) {
+      await saveSettings(false);
+    }
+  };
+
+  const handleAutoLocationChange = async (checked: boolean) => {
+    setSettings({ ...settings, use_auto_location: checked });
+    // Auto-save when auto-location setting changes
+    await saveSettings(false);
+  };
+
+  const handleCacheDurationChange = async (duration: number) => {
+    setSettings({ ...settings, cache_duration_minutes: duration });
+    // Auto-save when cache duration changes
+    await saveSettings(false);
+  };
+
+  const testGeminiApiKey = async () => {
+    if (!settings.gemini_api_key.trim()) {
+      setMessageWithAutoDismiss("Enter a Gemini API key first", true);
       return;
     }
 
     setIsLoading(true);
     try {
-      await invoke("save_app_settings_cmd", { settings });
-      setMessageWithAutoDismiss("Settings saved successfully!");
+      await invoke("test_gemini_api", {
+        apiKey: settings.gemini_api_key,
+      });
+      setMessageWithAutoDismiss("Gemini API key test successful! ✓");
     } catch (error) {
-      setMessageWithAutoDismiss(`Error saving settings: ${error}`, true);
+      setMessageWithAutoDismiss(`Gemini API test failed: ${error}`, true);
     } finally {
       setIsLoading(false);
     }
@@ -272,6 +320,7 @@ export function SettingsPage() {
                 type="password"
                 value={settings.weather_api_key}
                 onChange={(e) => setSettings({ ...settings, weather_api_key: e.target.value })}
+                onBlur={handleWeatherApiKeyBlur}
                 placeholder="Enter your WeatherAPI.com key"
                 className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
@@ -299,24 +348,6 @@ export function SettingsPage() {
           </div>
         </div>
 
-        {/* Save API Key Button */}
-        <div className="mt-6 pt-4 border-t border-border">
-          <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-            {isLoading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
-                <span>Saving API Settings...</span>
-              </div>
-            ) : isImporting ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
-                <span>Import in Progress...</span>
-              </div>
-            ) : (
-              "Save API Settings"
-            )}
-          </Button>
-        </div>
       </div>
 
       {/* Location Settings */}
@@ -328,7 +359,7 @@ export function SettingsPage() {
               id="auto-location"
               type="checkbox"
               checked={settings.use_auto_location}
-              onChange={(e) => setSettings({ ...settings, use_auto_location: e.target.checked })}
+              onChange={(e) => handleAutoLocationChange(e.target.checked)}
               className="w-4 h-4 text-white bg-card border border-border rounded-md focus:ring-primary focus:ring-2 accent-primary"
             />
             <label htmlFor="auto-location" className="ml-3 text-sm font-medium text-text-primary cursor-pointer">
@@ -345,6 +376,7 @@ export function SettingsPage() {
                 type="text"
                 value={settings.location}
                 onChange={(e) => setSettings({ ...settings, location: e.target.value })}
+                onBlur={handleLocationBlur}
                 placeholder="e.g., New York, London, 40.7128,-74.0060"
                 className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
@@ -353,24 +385,6 @@ export function SettingsPage() {
           )}
         </div>
 
-        {/* Save Location Button */}
-        <div className="mt-6 pt-4 border-t border-border">
-          <Button onClick={saveSettings} disabled={isLoading || isImporting} size="lg" className="w-full shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-            {isLoading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
-                <span>Saving Location Settings...</span>
-              </div>
-            ) : isImporting ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
-                <span>Import in Progress...</span>
-              </div>
-            ) : (
-              "Save Location Settings"
-            )}
-          </Button>
-        </div>
       </div>
 
       {/* Theme Settings */}
@@ -408,7 +422,7 @@ export function SettingsPage() {
             <label className="block text-sm font-medium text-text-primary mb-2">Cache Duration</label>
             <select
               value={settings.cache_duration_minutes}
-              onChange={(e) => setSettings({ ...settings, cache_duration_minutes: parseInt(e.target.value) })}
+              onChange={(e) => handleCacheDurationChange(parseInt(e.target.value))}
               className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
             >
               <option value={5}>5 minutes</option>
@@ -423,6 +437,53 @@ export function SettingsPage() {
             <Button onClick={clearWeatherCache} variant="secondary" className="shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
               Clear Weather Cache
             </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Gemini AI API Settings */}
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">AI Generation Configuration</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Google Gemini API Key
+            </label>
+            <div className="flex space-x-3">
+              <input
+                type="password"
+                value={settings.gemini_api_key}
+                onChange={(e) => setSettings({ ...settings, gemini_api_key: e.target.value })}
+                onBlur={handleGeminiApiKeyBlur}
+                placeholder="Enter your Gemini API key"
+                className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+              />
+              <Button onClick={testGeminiApiKey} disabled={isLoading} size="md">
+                {isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
+                    <span>Testing...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Icon name="check" size={16} />
+                    <span>Test</span>
+                  </div>
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+              Get a free API key at{" "}
+              <a
+                href="https://aistudio.google.com/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary-hover underline"
+              >
+                Google AI Studio
+              </a>
+              . Required for AI wallpaper generation features.
+            </p>
           </div>
         </div>
       </div>

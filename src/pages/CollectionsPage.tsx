@@ -56,9 +56,16 @@ export function CollectionsPage() {
       if (filePath) {
         setMessageWithAutoDismiss(`Copying ${category} wallpaper...`);
 
+        const activeCollection = getActiveCollection();
+        if (!activeCollection) {
+          setMessage("No active collection selected");
+          return;
+        }
+
         const copiedPath = await invoke("copy_wallpaper_image", {
           sourcePath: filePath,
           category: category,
+          collectionId: activeCollection.id,
         });
 
         updateSetting(category, { imagePath: copiedPath as string });

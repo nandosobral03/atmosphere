@@ -12,15 +12,15 @@ pub async fn set_wallpaper(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub async fn copy_wallpaper_image(source_path: String, category: String) -> Result<String, String> {
+pub async fn copy_wallpaper_image(source_path: String, category: String, collection_id: String) -> Result<String, String> {
     // Get the app data directory
     let app_dir = get_app_data_dir()?;
 
-    // Create wallpapers subdirectory
-    let wallpapers_dir = app_dir.join("wallpapers");
-    if !wallpapers_dir.exists() {
-        fs::create_dir_all(&wallpapers_dir)
-            .map_err(|e| format!("Failed to create wallpapers directory: {}", e))?;
+    // Create collection-specific subdirectory
+    let collection_dir = app_dir.join("wallpapers").join(&collection_id);
+    if !collection_dir.exists() {
+        fs::create_dir_all(&collection_dir)
+            .map_err(|e| format!("Failed to create collection wallpapers directory: {}", e))?;
     }
 
     // Get file extension from source
@@ -31,7 +31,7 @@ pub async fn copy_wallpaper_image(source_path: String, category: String) -> Resu
 
     // Create destination path with category name
     let dest_filename = format!("{}.{}", category, extension);
-    let dest_path = wallpapers_dir.join(&dest_filename);
+    let dest_path = collection_dir.join(&dest_filename);
 
     // Copy the file
     fs::copy(&source_path, &dest_path)

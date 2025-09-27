@@ -146,7 +146,7 @@ export function HomePage() {
           <div className="text-center">
             <div className="mb-4 group-hover:scale-110 transition-transform duration-200 flex justify-center">
               <div className="p-3 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-200">
-                <Icon name="palette" size={32} className="text-primary" />
+                <Icon name="gallery" size={32} className="text-primary" />
               </div>
             </div>
             <h3 className="font-semibold mb-2 text-text-primary text-lg">Collections</h3>
@@ -155,8 +155,23 @@ export function HomePage() {
         </button>
 
         <button
-          onClick={() => setCurrentPage("settings")}
+          onClick={() => setCurrentPage("ai-generator")}
           className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-300 ease-out group hover:-translate-y-1 hover:scale-[1.02] shadow-card hover:shadow-card-hover active:scale-[0.98] transform-gpu focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 cursor-pointer"
+        >
+          <div className="text-center">
+            <div className="mb-4 group-hover:scale-110 transition-transform duration-200 flex justify-center">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-600 group-hover:to-pink-600 transition-colors duration-200 rounded-2xl">
+                <Icon name="upload" size={32} className="text-white" />
+              </div>
+            </div>
+            <h3 className="font-semibold mb-2 text-text-primary text-lg">AI Generator</h3>
+            <p className="text-text-secondary text-sm leading-relaxed">Create variations with AI</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setCurrentPage("settings")}
+          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-300 ease-out group hover:-translate-y-1 hover:scale-[1.02] shadow-card hover:shadow-card-hover active:scale-[0.98] transform-gpu focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 cursor-pointer col-span-2"
         >
           <div className="text-center">
             <div className="mb-4 group-hover:scale-110 transition-transform duration-200 flex justify-center">

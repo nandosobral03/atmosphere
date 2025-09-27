@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { IconName } from "../components/ui/Icon";
 
-export type PageType = "home" | "collections" | "settings";
+export type PageType = "home" | "collections" | "ai-generator" | "settings";
 
 interface NavigationStore {
   currentPage: PageType;
@@ -34,6 +34,11 @@ export const useNavigationStore = create<NavigationStore>()(
           title: "Collections",
           icon: "gallery",
           description: "Wallpaper categories and settings",
+        },
+        "ai-generator": {
+          title: "AI Generator",
+          icon: "upload",
+          description: "Generate wallpaper variations with AI",
         },
         settings: {
           title: "Settings",

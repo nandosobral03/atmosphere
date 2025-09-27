@@ -7,3 +7,4 @@ pub mod greet;
 pub mod scheduler;
 pub mod settings;
 pub mod backup;
+pub mod ai_generation;

@@ -6,6 +6,7 @@ use modules::wallpaper::{set_wallpaper, copy_wallpaper_image, cleanup_unused_wal
 use modules::scheduler::{start_wallpaper_scheduler, stop_wallpaper_scheduler, get_scheduler_status, initialize_scheduler, update_scheduler_collection_data};
 use modules::settings::{get_app_settings, save_app_settings_cmd, test_weather_api};
 use modules::backup::{export_backup, import_backup, write_backup_file, read_backup_file, get_backup_collections_data};
+use modules::ai_generation::{get_default_prompts, generate_wallpaper_variations, test_gemini_api, reset_ai_prompts, save_ai_prompts, open_wallpapers_folder, open_collection_folder, move_generated_image_to_collection};
 use tauri::{tray::TrayIconBuilder, Manager};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -75,7 +76,15 @@ pub fn run() {
             import_backup,
             write_backup_file,
             read_backup_file,
-            get_backup_collections_data
+            get_backup_collections_data,
+            get_default_prompts,
+            generate_wallpaper_variations,
+            test_gemini_api,
+            reset_ai_prompts,
+            save_ai_prompts,
+            open_wallpapers_folder,
+            open_collection_folder,
+            move_generated_image_to_collection
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

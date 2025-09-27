@@ -11,7 +11,10 @@
       "Bash(npm uninstall:*)",
       "Bash(find:*)",
       "WebFetch(domain:www.weatherapi.com)",
-      "WebFetch(domain:choosealicense.com)"
+      "WebFetch(domain:choosealicense.com)",
+      "WebSearch",
+      "WebFetch(domain:ai.google.dev)",
+      "WebFetch(domain:developers.googleblog.com)"
     ],
     "deny": [],
     "ask": []
