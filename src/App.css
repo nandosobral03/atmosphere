@@ -1,20 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #f3e8e4;
-  --color-bg-secondary: #e8d5d0;
-  --color-bg-gradient: linear-gradient(135deg, #f3e8e4 0%, #e8d5d0 100%);
-  --color-primary: #ff6b35;
-  --color-primary-hover: #ff8a65;
-  --color-primary-focus: #ff6b35;
-  --color-primary-light: rgba(255, 107, 53, 0.1);
-  --color-primary-dark: #e55a2b;
+  --color-bg-primary: #faf7f8;
+  --color-bg-secondary: #f5f0f2;
+  --color-bg-gradient: linear-gradient(135deg, #faf7f8 0%, #f5f0f2 100%);
+  --color-primary: #e91e63;
+  --color-primary-hover: #f06292;
+  --color-primary-focus: #e91e63;
+  --color-primary-light: rgba(233, 30, 99, 0.1);
+  --color-primary-dark: #c2185b;
   --color-card: #ffffff;
-  --color-surface: #fdf7f2;
+  --color-surface: #fcfafc;
   --color-overlay: rgba(0, 0, 0, 0.05);
   --color-text-primary: #2c2c2c;
-  --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
+  --color-text-secondary: #6b7280 --color-text-tertiary: #9ca3af;
   --color-text-inverse: #ffffff;
   --color-border: rgba(229, 231, 235, 0.3);
   --color-border-strong: rgba(229, 231, 235, 0.6);
@@ -40,8 +39,8 @@
   /* Shadows */
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
   --shadow-card-hover: 0 8px 40px rgba(0, 0, 0, 0.12);
-  --shadow-button: 0 2px 8px rgba(255, 107, 53, 0.25);
-  --shadow-button-hover: 0 4px 16px rgba(255, 107, 53, 0.35);
+  --shadow-button: 0 2px 8px rgba(233, 30, 99, 0.25);
+  --shadow-button-hover: 0 4px 16px rgba(233, 30, 99, 0.35);
 
   /* Typography */
   --font-display: 32px;
