@@ -1,51 +1,49 @@
-import React from 'react';
-import { ReactNode } from 'react';
+import React from "react";
+import { ReactNode } from "react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'ghost' | 'navigation';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "success" | "danger" | "ghost" | "outline";
+  size?: "sm" | "md" | "lg";
   loading?: boolean;
   children: ReactNode;
   className?: string;
 }
 
 const buttonVariants = {
-  primary: 'bg-primary hover:bg-primary-hover text-text-inverse border-transparent',
-  secondary: 'bg-surface hover:bg-border text-text-primary border border-border',
-  success: 'bg-success hover:bg-success-hover text-text-inverse border-transparent',
-  danger: 'bg-danger hover:bg-danger-hover text-text-inverse border-transparent',
-  ghost: 'bg-transparent hover:bg-surface text-text-primary border-transparent',
-  navigation: 'bg-card hover:bg-surface text-text-primary border border-border'
+  primary: "bg-primary hover:bg-primary-hover text-white shadow-sm border-transparent",
+  secondary: "bg-white hover:bg-gray-50 text-text-primary border-border shadow-sm",
+  success: "bg-success hover:bg-success-hover text-white shadow-sm border-transparent",
+  danger: "bg-danger hover:bg-danger-hover text-white shadow-sm border-transparent",
+  ghost:
+    "bg-transparent hover:bg-gray-100 text-text-secondary hover:text-text-primary border-transparent shadow-none",
+  outline: "bg-transparent hover:bg-gray-50 text-text-primary border-border border shadow-sm",
 };
 
 const buttonSizes = {
-  sm: 'px-3 py-1.5 text-sm font-medium',
-  md: 'px-4 py-2 text-sm font-medium',
-  lg: 'px-8 py-3 text-sm font-semibold'
+  sm: "px-3 py-1.5 text-xs font-medium",
+  md: "px-4 py-2 text-sm font-medium",
+  lg: "px-6 py-3 text-base font-medium",
 };
 
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   loading = false,
   disabled = false,
-  className = '',
+  className = "",
   children,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center rounded-xl border transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-border disabled:text-text-secondary cursor-pointer';
-  
+  const baseClasses =
+    "inline-flex items-center justify-center rounded-md border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-none cursor-pointer active:scale-[0.98]";
+
   const variantClasses = buttonVariants[variant];
   const sizeClasses = buttonSizes[size];
-  
+
   const combinedClasses = `${baseClasses} ${variantClasses} ${sizeClasses} ${className}`.trim();
 
   return (
-    <button
-      className={combinedClasses}
-      disabled={disabled || loading}
-      {...props}
-    >
+    <button className={combinedClasses} disabled={disabled || loading} {...props}>
       {loading && (
         <svg
           className="w-4 h-4 mr-2 animate-spin"

@@ -1,46 +1,57 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #faf7f8;
-  --color-bg-secondary: #f5f0f2;
-  --color-bg-gradient: linear-gradient(135deg, #faf7f8 0%, #f5f0f2 100%);
-  --color-primary: #e91e63;
-  --color-primary-hover: #f06292;
-  --color-primary-focus: #e91e63;
-  --color-primary-light: rgba(233, 30, 99, 0.1);
-  --color-primary-dark: #c2185b;
+  --color-bg-primary: #f8fafc;
+  --color-bg-secondary: #f1f5f9;
+  --color-bg-gradient: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+
+  /* Primary Color: Teal */
+  --color-primary: #0d9488;
+  --color-primary-hover: #0f766e;
+  --color-primary-focus: #0d9488;
+  --color-primary-light: #ccfbf1;
+  --color-primary-dark: #115e59;
+
   --color-card: #ffffff;
-  --color-surface: #fcfafc;
-  --color-overlay: rgba(0, 0, 0, 0.05);
-  --color-text-primary: #2c2c2c;
-  --color-text-secondary: #6b7280 --color-text-tertiary: #9ca3af;
+  --color-surface: #f8fafc;
+  --color-overlay: rgba(0, 0, 0, 0.04);
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-tertiary: #94a3b8;
   --color-text-inverse: #ffffff;
-  --color-border: rgba(229, 231, 235, 0.3);
-  --color-border-strong: rgba(229, 231, 235, 0.6);
-  --color-divider: rgba(229, 231, 235, 0.2);
+
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-divider: #f1f5f9;
+
   --color-yellow: #f59e0b;
-  --color-coral: #f87171;
+  --color-coral: #f43f5e;
   --color-purple: #8b5cf6;
   --color-cyan: #06b6d4;
-  --color-green: #84cc16;
-  --color-success: #84cc16;
-  --color-success-hover: #65a30d;
-  --color-success-light: rgba(132, 204, 22, 0.1);
-  --color-danger: #f87171;
-  --color-danger-hover: #ef4444;
-  --color-danger-light: rgba(248, 113, 113, 0.1);
+  --color-green: #10b981;
+
+  --color-success: #10b981;
+  --color-success-hover: #059669;
+  --color-success-light: #d1fae5;
+
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-danger-light: #fee2e2;
+
   --color-warning: #f59e0b;
   --color-warning-hover: #d97706;
-  --color-warning-light: rgba(245, 158, 11, 0.1);
-  --color-info: #06b6d4;
-  --color-info-hover: #0891b2;
-  --color-info-light: rgba(6, 182, 212, 0.1);
+  --color-warning-light: #fef3c7;
+
+  --color-info: #3b82f6;
+  --color-info-hover: #2563eb;
+  --color-info-light: #dbeafe;
 
   /* Shadows */
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 40px rgba(0, 0, 0, 0.12);
-  --shadow-button: 0 2px 8px rgba(233, 30, 99, 0.25);
-  --shadow-button-hover: 0 4px 16px rgba(233, 30, 99, 0.35);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-button: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-button-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 
   /* Typography */
   --font-display: 32px;
@@ -52,128 +63,48 @@
   --font-caption: 11px;
 }
 
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-bg-gradient);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 /* Custom checkbox styling */
 input[type="checkbox"] {
   accent-color: var(--color-primary);
-}
-
-input[type="checkbox"]:checked {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
-}
-
-/* Force white checkmark */
-input[type="checkbox"]:checked::before {
-  color: white !important;
-}
-
-input[type="checkbox"]:checked svg {
-  color: white !important;
-  fill: white !important;
-}
-
-/* Custom slider thumb styling for webkit browsers */
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: #06b6d4;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Custom slider thumb styling for Firefox */
-.slider::-moz-range-thumb {
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  cursor: pointer;
-  border: none;
-  box-shadow: var(--shadow-button);
+/* Range slider */
+input[type="range"] {
+  @apply h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
 }
 
-/* Floating Animation Keyframes */
-@keyframes float-1 {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(10px, -15px) rotate(1deg);
-  }
-  50% {
-    transform: translate(-5px, -10px) rotate(-1deg);
-  }
-  75% {
-    transform: translate(-10px, 5px) rotate(0.5deg);
-  }
+input[type="range"]::-webkit-slider-thumb {
+  @apply w-4 h-4 bg-teal-600 rounded-full border-2 border-white shadow-sm appearance-none transition-transform hover:scale-110;
 }
 
-@keyframes float-2 {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  33% {
-    transform: translate(-15px, 10px) rotate(-1deg);
-  }
-  66% {
-    transform: translate(8px, -12px) rotate(1deg);
-  }
-}
-
-@keyframes float-3 {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  20% {
-    transform: translate(-45%, -55%) rotate(0.5deg);
-  }
-  40% {
-    transform: translate(-55%, -45%) rotate(-0.5deg);
-  }
-  60% {
-    transform: translate(-50%, -60%) rotate(1deg);
-  }
-  80% {
-    transform: translate(-40%, -50%) rotate(-0.5deg);
-  }
-}
-
-@keyframes float-4 {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  30% {
-    transform: translate(12px, -8px) rotate(-1deg);
-  }
-  70% {
-    transform: translate(-8px, 12px) rotate(1deg);
-  }
-}
-
-@keyframes float-5 {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-10px, -12px) rotate(0.5deg);
-  }
-  50% {
-    transform: translate(15px, 8px) rotate(-1deg);
-  }
-  75% {
-    transform: translate(5px, -5px) rotate(0.5deg);
-  }
-}
-
-button {
-  cursor: pointer;
+* {
+  user-select: none;
 }

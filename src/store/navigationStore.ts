@@ -19,7 +19,7 @@ interface NavigationStore {
 
 export const useNavigationStore = create<NavigationStore>()(
   persist(
-    (set) => ({
+    set => ({
       currentPage: "home",
 
       setCurrentPage: (page: PageType) => set({ currentPage: page }),

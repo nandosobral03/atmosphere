@@ -16,7 +16,7 @@ export function SchedulerControl() {
 
   const fetchStatus = async () => {
     try {
-      const result = await invoke("get_scheduler_status") as SchedulerStatus;
+      const result = (await invoke("get_scheduler_status")) as SchedulerStatus;
       setStatus(result);
       setIntervalMinutes(result.interval_minutes);
     } catch (error) {
@@ -50,7 +50,7 @@ export function SchedulerControl() {
 
   useEffect(() => {
     fetchStatus();
-    
+
     // Refresh status every 30 seconds
     const interval = setInterval(fetchStatus, 30000);
     return () => clearInterval(interval);
@@ -58,26 +58,24 @@ export function SchedulerControl() {
 
   if (!status) {
     return (
-      <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
-        <div className="text-center text-text-secondary">
-          Loading scheduler status...
-        </div>
+      <div className="bg-card rounded-xl p-4 border border-border shadow-card">
+        <div className="text-center text-text-secondary">Loading scheduler status...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-card rounded-2xl p-4 border border-border shadow-card">
+    <div className="bg-card rounded-xl p-4 border border-border shadow-card">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-text-primary">
-          Auto Wallpaper
-        </h3>
-        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-          status.enabled && status.is_running 
-            ? 'bg-success-light text-success-hover'
-            : 'bg-danger-light text-danger-hover'
-        }`}>
-          {status.enabled && status.is_running ? 'ACTIVE' : 'INACTIVE'}
+        <h3 className="text-lg font-semibold text-text-primary">Auto Wallpaper</h3>
+        <div
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            status.enabled && status.is_running
+              ? "bg-success-light text-success-hover"
+              : "bg-danger-light text-danger-hover"
+          }`}
+        >
+          {status.enabled && status.is_running ? "ACTIVE" : "INACTIVE"}
         </div>
       </div>
 
@@ -96,7 +94,7 @@ export function SchedulerControl() {
             min="1"
             max="30"
             value={intervalMinutes}
-            onChange={(e) => setIntervalMinutes(parseInt(e.target.value))}
+            onChange={e => setIntervalMinutes(parseInt(e.target.value))}
             disabled={status.enabled && status.is_running}
             className="w-full h-2 bg-surface rounded-full appearance-none cursor-pointer slider disabled:cursor-not-allowed"
           />
@@ -113,7 +111,7 @@ export function SchedulerControl() {
             <button
               onClick={stopScheduler}
               disabled={isLoading}
-              className="flex-1 bg-danger hover:bg-danger-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 bg-danger hover:bg-danger-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-lg text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? "Stopping..." : "Stop Auto Wallpaper"}
             </button>
@@ -121,16 +119,16 @@ export function SchedulerControl() {
             <button
               onClick={startScheduler}
               disabled={isLoading}
-              className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse font-medium py-2 px-4 rounded-lg text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? "Starting..." : "Start Auto Wallpaper"}
             </button>
           )}
-          
+
           <button
             onClick={fetchStatus}
             disabled={isLoading}
-            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse rounded-xl text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
+            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-border text-text-inverse rounded-lg text-sm transition-colors disabled:cursor-not-allowed cursor-pointer"
             title="Refresh status"
           >
             <Icon name="loading" size={16} className="text-text-inverse" />
@@ -140,7 +138,8 @@ export function SchedulerControl() {
         {/* Status Info */}
         {status.last_applied_path && (
           <div className="text-xs text-text-secondary bg-surface p-2 rounded">
-            <span className="font-medium">Last applied:</span> {status.last_applied_path.split('\\').pop()}
+            <span className="font-medium">Last applied:</span>{" "}
+            {status.last_applied_path.split("\\").pop()}
           </div>
         )}
       </div>

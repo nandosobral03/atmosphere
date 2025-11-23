@@ -22,7 +22,7 @@ export function Alert({
   className = "",
   children,
 }: AlertProps) {
-  const baseClasses = "p-3 rounded-xl text-sm font-medium transition-all duration-300 border";
+  const baseClasses = "p-3 rounded-lg text-sm font-medium transition-all duration-300 border";
   const variantClasses = alertVariants[variant];
 
   const combinedClasses = `${baseClasses} ${variantClasses} ${className}`.trim();

@@ -10,7 +10,7 @@ export interface CardProps {
     | "warning"
     | "danger"
     | "editing";
-  padding?: "sm" | "md" | "lg";
+  padding?: "none" | "sm" | "md" | "lg";
   border?: boolean;
   shadow?: "none" | "sm" | "md" | "lg";
   className?: string;
@@ -19,16 +19,17 @@ export interface CardProps {
 
 const cardVariants = {
   default: "bg-card border-border",
-  highlighted: "bg-primary-light border-primary",
-  status: "bg-primary-light border-primary-hover",
-  info: "bg-primary-light border-primary",
-  success: "bg-success-light border-success-hover",
-  warning: "bg-warning-light border-warning-hover",
-  danger: "bg-danger-light border-danger-hover",
-  editing: "bg-warning-light border-warning-hover",
+  highlighted: "bg-primary-light border-primary-light/50",
+  status: "bg-white border-border",
+  info: "bg-blue-50 border-blue-100",
+  success: "bg-green-50 border-green-100",
+  warning: "bg-amber-50 border-amber-100",
+  danger: "bg-red-50 border-red-100",
+  editing: "bg-amber-50/50 border-amber-200 dashed border-2",
 };
 
 const cardPadding = {
+  none: "p-0",
   sm: "p-3",
   md: "p-4",
   lg: "p-6",
@@ -36,9 +37,9 @@ const cardPadding = {
 
 const cardShadows = {
   none: "",
-  sm: "shadow-card",
-  md: "shadow-card-hover",
-  lg: "shadow-card-hover",
+  sm: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
 };
 
 export function Card({
@@ -49,10 +50,10 @@ export function Card({
   className = "",
   children,
 }: CardProps) {
-  const baseClasses = "rounded-2xl transition-all";
+  const baseClasses = "rounded-lg transition-all duration-200";
   const variantClasses = cardVariants[variant];
   const paddingClasses = cardPadding[padding];
-  const borderClasses = border ? "border" : "";
+  const borderClasses = border && !variant.includes("editing") ? "border" : "";
   const shadowClasses = cardShadows[shadow];
 
   const combinedClasses =

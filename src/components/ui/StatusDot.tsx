@@ -5,23 +5,23 @@ export interface StatusDotProps {
 }
 
 const statusDotVariants = {
-  primary: "bg-[var(--color-primary)]",
-  secondary: "bg-[var(--color-secondary)]",
-  success: "bg-[var(--color-success)]",
-  danger: "bg-[var(--color-danger)]",
-  warning: "bg-[var(--color-warning)]",
-  info: "bg-[var(--color-info)]",
-  inactive: "bg-[var(--color-gray-400)]",
+  primary: "bg-primary shadow-[0_0_0_1px_rgba(79,70,229,0.2)]",
+  secondary: "bg-gray-400",
+  success: "bg-emerald-500 shadow-[0_0_0_1px_rgba(16,185,129,0.2)]",
+  danger: "bg-red-500 shadow-[0_0_0_1px_rgba(239,68,68,0.2)]",
+  warning: "bg-amber-500 shadow-[0_0_0_1px_rgba(245,158,11,0.2)]",
+  info: "bg-blue-500 shadow-[0_0_0_1px_rgba(59,130,246,0.2)]",
+  inactive: "bg-gray-300",
 };
 
 const statusDotSizes = {
-  sm: "w-2 h-2", // w-2 h-2
-  md: "w-3 h-3", // w-3 h-3 (current standard)
-  lg: "w-4 h-4", // w-4 h-4
+  sm: "w-1.5 h-1.5",
+  md: "w-2.5 h-2.5",
+  lg: "w-3.5 h-3.5",
 };
 
 export function StatusDot({ variant = "primary", size = "md", className = "" }: StatusDotProps) {
-  const baseClasses = "rounded-[var(--radius-full)] flex-shrink-0";
+  const baseClasses = "rounded-full flex-shrink-0";
   const variantClasses = statusDotVariants[variant];
   const sizeClasses = statusDotSizes[size];
 

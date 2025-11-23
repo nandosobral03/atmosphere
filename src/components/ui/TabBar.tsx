@@ -20,13 +20,13 @@ export interface TabBarProps {
 
 const tabVariants = {
   default: {
-    container: "bg-surface rounded-xl",
-    tab: "rounded-lg",
+    container: "bg-surface rounded-lg",
+    tab: "rounded-md",
     active: "bg-primary text-text-inverse",
     inactive: "text-text-primary hover:bg-border",
   },
   bordered: {
-    container: "border border-border rounded-xl overflow-hidden",
+    container: "border border-border rounded-lg overflow-hidden",
     tab: "",
     active: "bg-primary text-text-inverse",
     inactive: "bg-card text-text-primary hover:bg-surface border-r border-border last:border-r-0",

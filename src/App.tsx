@@ -7,7 +7,6 @@ import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { IconSprite } from "./components/IconSprite";
-import { BackgroundShapes } from "./components/BackgroundShapes";
 import "./App.css";
 
 function App() {
@@ -37,7 +36,6 @@ function App() {
   return (
     <main className="min-h-screen overflow-y-auto bg-bg-gradient relative">
       <IconSprite />
-      <BackgroundShapes />
       <div className="max-w-md mx-auto min-h-screen relative z-10">{renderCurrentPage()}</div>
     </main>
   );
