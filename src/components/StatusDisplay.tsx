@@ -97,7 +97,7 @@ export function StatusDisplay({ currentConditions }: StatusDisplayProps) {
               </span>
             )}
             <span>•</span>
-            <span>{currentTime}</span>
+            <span className="min-w-20 text-right">{currentTime}</span>
           </div>
         </div>
       </div>

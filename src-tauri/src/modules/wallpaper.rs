@@ -1,7 +1,8 @@
-use wallpaper;
-use std::path::Path;
-use std::fs;
 use crate::modules::utils::get_app_data_dir;
+use std::fs;
+use std::path::Path;
+use std::time::{SystemTime, UNIX_EPOCH};
+use wallpaper;
 
 #[tauri::command]
 pub async fn set_wallpaper(path: String) -> Result<String, String> {
@@ -12,7 +13,11 @@ pub async fn set_wallpaper(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub async fn copy_wallpaper_image(source_path: String, category: String, collection_id: String) -> Result<String, String> {
+pub async fn copy_wallpaper_image(
+    source_path: String,
+    category: String,
+    collection_id: String,
+) -> Result<String, String> {
     // Get the app data directory
     let app_dir = get_app_data_dir()?;
 
@@ -23,22 +28,47 @@ pub async fn copy_wallpaper_image(source_path: String, category: String, collect
             .map_err(|e| format!("Failed to create collection wallpapers directory: {}", e))?;
     }
 
+    // Remove any existing files for this category to avoid clutter
+    if let Ok(entries) = fs::read_dir(&collection_dir) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                if path.is_file() {
+                    if let Some(stem) = path.file_stem().and_then(|s| s.to_str()) {
+                        // Check if filename starts with category name
+                        if stem.starts_with(&format!("{}_", category)) || stem == category {
+                            let _ = fs::remove_file(path);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // Get file extension from source
     let source_path_obj = Path::new(&source_path);
-    let extension = source_path_obj.extension()
+    let extension = source_path_obj
+        .extension()
         .and_then(|ext| ext.to_str())
         .unwrap_or("jpg");
 
-    // Create destination path with category name
-    let dest_filename = format!("{}.{}", category, extension);
+    // Generate unique filename with timestamp to prevent caching
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis();
+
+    // Create destination path: category_timestamp.ext
+    let dest_filename = format!("{}_{}.{}", category, timestamp, extension);
     let dest_path = collection_dir.join(&dest_filename);
 
     // Copy the file
-    fs::copy(&source_path, &dest_path)
-        .map_err(|e| format!("Failed to copy file: {}", e))?;
+    fs::copy(&source_path, &dest_path).map_err(|e| format!("Failed to copy file: {}", e))?;
 
     // Return the destination path as string
-    dest_path.to_string_lossy().to_string()
+    dest_path
+        .to_string_lossy()
+        .to_string()
         .parse()
         .map_err(|e| format!("Failed to convert path: {}", e))
 }
@@ -64,6 +94,10 @@ pub async fn cleanup_unused_wallpapers(used_categories: Vec<String>) -> Result<S
         if path.is_file() {
             if let Some(filename) = path.file_stem().and_then(|s| s.to_str()) {
                 // Check if this category is still used
+                // Note: This cleanup logic might need update if we use timestamped filenames
+                // For now, strictly relying on full filename match or prefix match might be tricky
+                // if used_categories contains pure category names.
+                // Assuming used_categories contains the FULL filenames stored in settings.
                 if !used_categories.contains(&filename.to_string()) {
                     match fs::remove_file(&path) {
                         Ok(_) => {

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { save, open } from "@tauri-apps/plugin-dialog";
+import { enable, disable, isEnabled } from "@tauri-apps/plugin-autostart";
 import { SchedulerControl } from "../components/SchedulerControl";
 import { useNavigationStore } from "../store/navigationStore";
 import { useCollectionStore } from "../store/collectionStore";
-// import { useThemeStore } from "../store/themeStore";
 import { Icon } from "../components/ui/Icon";
 import { Button } from "../components/ui/Button";
 
@@ -18,10 +18,10 @@ interface AppSettings {
 export function SettingsPage() {
   const { setCurrentPage } = useNavigationStore();
   const collectionStore = useCollectionStore();
-  // const { theme, toggleTheme } = useThemeStore();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [autostartEnabled, setAutostartEnabled] = useState(false);
   const [settings, setSettings] = useState<AppSettings>({
     weather_api_key: "",
     location: "",
@@ -41,6 +41,32 @@ export function SettingsPage() {
     } catch (error) {
       console.error("Failed to fetch app settings:", error);
       setMessageWithAutoDismiss(`Error loading settings: ${error}`, true);
+    }
+  };
+
+  const checkAutostart = async () => {
+    try {
+      const enabled = await isEnabled();
+      setAutostartEnabled(enabled);
+    } catch (error) {
+      console.error("Failed to check autostart status:", error);
+    }
+  };
+
+  const toggleAutostart = async (checked: boolean) => {
+    try {
+      if (checked) {
+        await enable();
+        setAutostartEnabled(true);
+        setMessageWithAutoDismiss("Autostart enabled");
+      } else {
+        await disable();
+        setAutostartEnabled(false);
+        setMessageWithAutoDismiss("Autostart disabled");
+      }
+    } catch (error) {
+      console.error("Failed to toggle autostart:", error);
+      setMessageWithAutoDismiss(`Failed to toggle autostart: ${error}`, true);
     }
   };
 
@@ -246,6 +272,7 @@ export function SettingsPage() {
 
   useEffect(() => {
     fetchSettings();
+    checkAutostart();
   }, []);
 
   return (
@@ -391,6 +418,28 @@ export function SettingsPage() {
               </p>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* System Settings - Autostart */}
+      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
+        <h3 className="text-lg font-semibold text-text-primary mb-4">System</h3>
+        <div className="space-y-4">
+          <div className="flex items-center p-3 rounded-xl bg-surface/50 border border-border/50">
+            <input
+              id="autostart"
+              type="checkbox"
+              checked={autostartEnabled}
+              onChange={e => toggleAutostart(e.target.checked)}
+              className="w-4 h-4 text-white bg-card border border-border rounded-md focus:ring-primary focus:ring-2 accent-primary"
+            />
+            <label
+              htmlFor="autostart"
+              className="ml-3 text-sm font-medium text-text-primary cursor-pointer"
+            >
+              Run on Startup
+            </label>
+          </div>
         </div>
       </div>
 

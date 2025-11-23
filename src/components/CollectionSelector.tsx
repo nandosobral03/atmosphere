@@ -30,8 +30,9 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
 
   const collectionList = Object.values(collections);
 
-  const handleCollectionChange = (collectionId: string) => {
-    setActiveCollection(collectionId);
+  const handleCollectionChange = async (collectionId: string) => {
+    // setActiveCollection is now async and triggers scheduler update
+    await setActiveCollection(collectionId);
     onCollectionChange?.(collectionId);
   };
 
@@ -53,6 +54,7 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
     }
 
     const newId = createCollection(newCollectionName.trim());
+    // setActiveCollection is now async
     setActiveCollection(newId);
     setNewCollectionName("");
     setShowCreateForm(false);
@@ -74,9 +76,12 @@ export function CollectionSelector({ onCollectionChange }: CollectionSelectorPro
     });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteConfirmation) {
       deleteCollection(deleteConfirmation.collectionId);
+      if (activeCollectionId) {
+        await setActiveCollection(activeCollectionId); // Re-trigger active collection logic if needed
+      }
       onCollectionChange?.(activeCollectionId);
       setDeleteConfirmation(null);
     }

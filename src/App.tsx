@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useNavigationStore } from "./store/navigationStore";
-import { useThemeStore } from "./store/themeStore";
 import { useSchedulerInitialization } from "./hooks/useSchedulerInitialization";
 import { useSchedulerSync } from "./hooks/useSchedulerSync";
 import { HomePage } from "./pages/HomePage";
@@ -11,14 +9,9 @@ import "./App.css";
 
 function App() {
   const { currentPage } = useNavigationStore();
-  const { theme } = useThemeStore();
 
   useSchedulerInitialization();
   useSchedulerSync();
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
 
   const renderCurrentPage = () => {
     switch (currentPage) {

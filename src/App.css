@@ -78,7 +78,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
