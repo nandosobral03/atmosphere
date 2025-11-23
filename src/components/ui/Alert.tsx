@@ -1,8 +1,7 @@
-import React from 'react';
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 export interface AlertProps {
-  variant?: 'success' | 'danger' | 'warning' | 'info';
+  variant?: "success" | "danger" | "warning" | "info";
   dismissible?: boolean;
   onDismiss?: () => void;
   className?: string;
@@ -10,27 +9,27 @@ export interface AlertProps {
 }
 
 const alertVariants = {
-  success: 'bg-success-light text-success-hover border-success-hover',
-  danger: 'bg-danger-light text-danger-hover border-danger-hover',
-  warning: 'bg-warning-light text-warning-hover border-warning-hover',
-  info: 'bg-info-light text-info-hover border-info-hover'
+  success: "bg-success-light text-success-hover border-success-hover",
+  danger: "bg-danger-light text-danger-hover border-danger-hover",
+  warning: "bg-warning-light text-warning-hover border-warning-hover",
+  info: "bg-info-light text-info-hover border-info-hover",
 };
 
 export function Alert({
-  variant = 'info',
+  variant = "info",
   dismissible = false,
   onDismiss,
-  className = '',
-  children
+  className = "",
+  children,
 }: AlertProps) {
-  const baseClasses = 'p-3 rounded-xl text-sm font-medium transition-all duration-300 border';
+  const baseClasses = "p-3 rounded-xl text-sm font-medium transition-all duration-300 border";
   const variantClasses = alertVariants[variant];
-  
+
   const combinedClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
 
   return (
     <div className={combinedClasses}>
-      <div className={`flex items-center ${dismissible ? 'justify-between' : 'justify-center'}`}>
+      <div className={`flex items-center ${dismissible ? "justify-between" : "justify-center"}`}>
         <div className="break-words text-center flex-1">{children}</div>
         {dismissible && onDismiss && (
           <button
@@ -39,7 +38,12 @@ export function Alert({
             aria-label="Dismiss"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         )}

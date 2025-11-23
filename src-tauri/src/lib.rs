@@ -1,12 +1,16 @@
 mod modules;
 
+use modules::backup::{
+    export_backup, get_backup_collections_data, import_backup, read_backup_file, write_backup_file,
+};
 use modules::greet::greet;
-use modules::weather::{get_current_conditions, get_time_periods, clear_weather_cache};
-use modules::wallpaper::{set_wallpaper, copy_wallpaper_image, cleanup_unused_wallpapers};
-use modules::scheduler::{start_wallpaper_scheduler, stop_wallpaper_scheduler, get_scheduler_status, initialize_scheduler, update_scheduler_collection_data};
+use modules::scheduler::{
+    get_scheduler_status, initialize_scheduler, start_wallpaper_scheduler,
+    stop_wallpaper_scheduler, update_scheduler_collection_data,
+};
 use modules::settings::{get_app_settings, save_app_settings_cmd, test_weather_api};
-use modules::backup::{export_backup, import_backup, write_backup_file, read_backup_file, get_backup_collections_data};
-use modules::ai_generation::{get_default_prompts, generate_wallpaper_variations, test_gemini_api, reset_ai_prompts, save_ai_prompts, open_wallpapers_folder, open_collection_folder, move_generated_image_to_collection};
+use modules::wallpaper::{cleanup_unused_wallpapers, copy_wallpaper_image, set_wallpaper};
+use modules::weather::{clear_weather_cache, get_current_conditions, get_time_periods};
 use tauri::{tray::TrayIconBuilder, Manager};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -41,7 +45,9 @@ pub fn run() {
                                             let x = screen_width - window_width - 10; // 20px from right edge
                                             let y = screen_height - window_height - 50; // 60px from bottom (for taskbar)
 
-                                            let _ = window.set_position(tauri::Position::Physical(tauri::PhysicalPosition { x, y }));
+                                            let _ = window.set_position(tauri::Position::Physical(
+                                                tauri::PhysicalPosition { x, y },
+                                            ));
                                         }
                                     }
                                     let _ = window.show();
@@ -77,14 +83,6 @@ pub fn run() {
             write_backup_file,
             read_backup_file,
             get_backup_collections_data,
-            get_default_prompts,
-            generate_wallpaper_variations,
-            test_gemini_api,
-            reset_ai_prompts,
-            save_ai_prompts,
-            open_wallpapers_folder,
-            open_collection_folder,
-            move_generated_image_to_collection
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

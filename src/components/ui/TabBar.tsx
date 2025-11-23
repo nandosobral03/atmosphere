@@ -1,6 +1,5 @@
-import React from 'react';
-import { ReactNode } from 'react';
-import { Icon, IconName } from './Icon';
+import { ReactNode } from "react";
+import { Icon, IconName } from "./Icon";
 
 export interface TabItem {
   id: string;
@@ -14,39 +13,39 @@ export interface TabBarProps {
   tabs: TabItem[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
-  variant?: 'default' | 'bordered';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "default" | "bordered";
+  size?: "sm" | "md" | "lg";
   className?: string;
 }
 
 const tabVariants = {
   default: {
-    container: 'bg-surface rounded-xl',
-    tab: 'rounded-lg',
-    active: 'bg-primary text-text-inverse',
-    inactive: 'text-text-primary hover:bg-border'
+    container: "bg-surface rounded-xl",
+    tab: "rounded-lg",
+    active: "bg-primary text-text-inverse",
+    inactive: "text-text-primary hover:bg-border",
   },
   bordered: {
-    container: 'border border-border rounded-xl overflow-hidden',
-    tab: '',
-    active: 'bg-primary text-text-inverse',
-    inactive: 'bg-card text-text-primary hover:bg-surface border-r border-border last:border-r-0'
-  }
+    container: "border border-border rounded-xl overflow-hidden",
+    tab: "",
+    active: "bg-primary text-text-inverse",
+    inactive: "bg-card text-text-primary hover:bg-surface border-r border-border last:border-r-0",
+  },
 };
 
 const tabSizes = {
-  sm: 'px-3 py-2 text-xs',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base'
+  sm: "px-3 py-2 text-xs",
+  md: "px-4 py-2 text-sm",
+  lg: "px-6 py-3 text-base",
 };
 
 export function TabBar({
   tabs,
   activeTab,
   onTabChange,
-  variant = 'default',
-  size = 'md',
-  className = ''
+  variant = "default",
+  size = "md",
+  className = "",
 }: TabBarProps) {
   const variantConfig = tabVariants[variant];
   const sizeClasses = tabSizes[size];
@@ -62,8 +61,8 @@ export function TabBar({
           ${variantConfig.tab}
           ${isActive ? variantConfig.active : variantConfig.inactive}
           ${sizeClasses}
-          ${isDisabled ? 'cursor-not-allowed opacity-50' : ''}
-          ${variant === 'bordered' && index > 0 ? 'border-l' : ''}
+          ${isDisabled ? "cursor-not-allowed opacity-50" : ""}
+          ${variant === "bordered" && index > 0 ? "border-l" : ""}
         `.trim();
 
         return (
@@ -76,7 +75,7 @@ export function TabBar({
             <div className="flex items-center justify-center space-x-2">
               {tab.icon && (
                 <span>
-                  {typeof tab.icon === 'string' ? (
+                  {typeof tab.icon === "string" ? (
                     <Icon name={tab.icon as IconName} size={16} />
                   ) : (
                     tab.icon
@@ -85,9 +84,7 @@ export function TabBar({
               )}
               <span>{tab.label}</span>
               {tab.count !== undefined && (
-                <span className="ml-1 text-xs opacity-75">
-                  ({tab.count})
-                </span>
+                <span className="ml-1 text-xs opacity-75">({tab.count})</span>
               )}
             </div>
           </button>

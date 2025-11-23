@@ -55,8 +55,15 @@ export function HomePage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-text-primary">Wallpaper Status</h3>
             <div className="flex items-center space-x-3">
-              {activeCollection && <div className="text-xs text-text-secondary">{activeCollection.name}</div>}
-              <Badge variant={schedulerStatus?.enabled && schedulerStatus?.is_running ? "success" : "secondary"} size="sm">
+              {activeCollection && (
+                <div className="text-xs text-text-secondary">{activeCollection.name}</div>
+              )}
+              <Badge
+                variant={
+                  schedulerStatus?.enabled && schedulerStatus?.is_running ? "success" : "secondary"
+                }
+                size="sm"
+              >
                 Auto: {schedulerStatus?.enabled && schedulerStatus?.is_running ? "ON" : "OFF"}
               </Badge>
             </div>
@@ -66,16 +73,20 @@ export function HomePage() {
             {(() => {
               // Get all enabled settings that match current conditions AND have images
               const potentialWallpapers = currentConditions.active_categories
-                .map((category) => ({
+                .map(category => ({
                   category,
                   setting: settings[category],
-                  info: WALLPAPER_CATEGORIES.find((c) => c.key === category),
+                  info: WALLPAPER_CATEGORIES.find(c => c.key === category),
                 }))
                 .filter(({ setting }) => setting?.enabled && setting?.imagePath)
                 .sort((a, b) => b.setting.priority - a.setting.priority); // Highest priority first
 
               if (potentialWallpapers.length === 0) {
-                return <div className="text-text-secondary text-sm">No enabled wallpapers for current conditions</div>;
+                return (
+                  <div className="text-text-secondary text-sm">
+                    No enabled wallpapers for current conditions
+                  </div>
+                );
               }
 
               // Since we only show wallpapers with images, the first (highest priority) one is active
@@ -84,7 +95,12 @@ export function HomePage() {
                 const hasImage = true; // All items in this list have images due to filtering
 
                 return (
-                  <Card key={category} variant={isActive ? "success" : hasImage ? "info" : "default"} padding="md" className="flex items-center space-x-3">
+                  <Card
+                    key={category}
+                    variant={isActive ? "success" : hasImage ? "info" : "default"}
+                    padding="md"
+                    className="flex items-center space-x-3"
+                  >
                     {/* Thumbnail for active wallpaper */}
                     {isActive && hasImage && (
                       <div className="w-16 aspect-video rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600 flex-shrink-0">
@@ -92,13 +108,15 @@ export function HomePage() {
                           src={convertFileSrc(setting.imagePath!)}
                           alt="Active wallpaper"
                           className="w-full h-full object-cover"
-                          onError={(e) => {
+                          onError={e => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = "none";
                             target.nextElementSibling?.classList.remove("hidden");
                           }}
                         />
-                        <div className="hidden w-full h-full flex items-center justify-center text-gray-400 text-xs">No Preview</div>
+                        <div className="hidden w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                          No Preview
+                        </div>
                       </div>
                     )}
 
@@ -106,7 +124,11 @@ export function HomePage() {
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center space-x-2">
-                        <div className={`text-sm font-medium ${isActive ? "text-success" : "text-text-primary"}`}>{info?.label || category}</div>
+                        <div
+                          className={`text-sm font-medium ${isActive ? "text-success" : "text-text-primary"}`}
+                        >
+                          {info?.label || category}
+                        </div>
                         <Badge variant={isActive ? "success" : "info"} size="xs">
                           {isActive ? "ACTIVE" : "READY"}
                         </Badge>
@@ -150,28 +172,15 @@ export function HomePage() {
               </div>
             </div>
             <h3 className="font-semibold mb-2 text-text-primary text-lg">Collections</h3>
-            <p className="text-text-secondary text-sm leading-relaxed">Manage wallpaper collections</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => setCurrentPage("ai-generator")}
-          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-300 ease-out group hover:-translate-y-1 hover:scale-[1.02] shadow-card hover:shadow-card-hover active:scale-[0.98] transform-gpu focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 cursor-pointer"
-        >
-          <div className="text-center">
-            <div className="mb-4 group-hover:scale-110 transition-transform duration-200 flex justify-center">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-600 group-hover:to-pink-600 transition-colors duration-200 rounded-2xl">
-                <Icon name="upload" size={32} className="text-white" />
-              </div>
-            </div>
-            <h3 className="font-semibold mb-2 text-text-primary text-lg">AI Generator</h3>
-            <p className="text-text-secondary text-sm leading-relaxed">Create variations with AI</p>
+            <p className="text-text-secondary text-sm leading-relaxed">
+              Manage wallpaper collections
+            </p>
           </div>
         </button>
 
         <button
           onClick={() => setCurrentPage("settings")}
-          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-300 ease-out group hover:-translate-y-1 hover:scale-[1.02] shadow-card hover:shadow-card-hover active:scale-[0.98] transform-gpu focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 cursor-pointer col-span-2"
+          className="p-6 rounded-2xl border border-border bg-card backdrop-blur-sm transition-all duration-300 ease-out group hover:-translate-y-1 hover:scale-[1.02] shadow-card hover:shadow-card-hover active:scale-[0.98] transform-gpu focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 cursor-pointer"
         >
           <div className="text-center">
             <div className="mb-4 group-hover:scale-110 transition-transform duration-200 flex justify-center">

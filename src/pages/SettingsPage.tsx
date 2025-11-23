@@ -10,7 +10,6 @@ import { Button } from "../components/ui/Button";
 
 interface AppSettings {
   weather_api_key: string;
-  gemini_api_key: string;
   location: string;
   use_auto_location: boolean;
   cache_duration_minutes: number;
@@ -25,7 +24,6 @@ export function SettingsPage() {
   const [isImporting, setIsImporting] = useState(false);
   const [settings, setSettings] = useState<AppSettings>({
     weather_api_key: "",
-    gemini_api_key: "",
     location: "",
     use_auto_location: true,
     cache_duration_minutes: 60,
@@ -69,12 +67,6 @@ export function SettingsPage() {
     }
   };
 
-  const handleGeminiApiKeyBlur = async () => {
-    if (settings.gemini_api_key.trim()) {
-      await saveSettings(false);
-    }
-  };
-
   const handleLocationBlur = async () => {
     if (!settings.use_auto_location && settings.location.trim()) {
       await saveSettings(false);
@@ -93,25 +85,6 @@ export function SettingsPage() {
     setSettings({ ...settings, cache_duration_minutes: duration });
     // Auto-save when cache duration changes
     await saveSettings(false);
-  };
-
-  const testGeminiApiKey = async () => {
-    if (!settings.gemini_api_key.trim()) {
-      setMessageWithAutoDismiss("Enter a Gemini API key first", true);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await invoke("test_gemini_api", {
-        apiKey: settings.gemini_api_key,
-      });
-      setMessageWithAutoDismiss("Gemini API key test successful! ✓");
-    } catch (error) {
-      setMessageWithAutoDismiss(`Gemini API test failed: ${error}`, true);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const clearWeatherCache = async () => {
@@ -210,7 +183,10 @@ export function SettingsPage() {
 
           setMessageWithAutoDismiss(result + "\nCollections restored successfully!");
         } catch (error) {
-          setMessageWithAutoDismiss(result + "\nWarning: Failed to restore collections data.", true);
+          setMessageWithAutoDismiss(
+            result + "\nWarning: Failed to restore collections data.",
+            true
+          );
         }
       } else {
         setMessageWithAutoDismiss(result);
@@ -257,7 +233,7 @@ export function SettingsPage() {
       // when the user navigates back or when useCurrentConditions hook re-runs
 
       // Trigger a small delay to allow backend to process changes
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.error("Error refreshing app data:", error);
     }
@@ -276,8 +252,12 @@ export function SettingsPage() {
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
               <h3 className="text-lg font-semibold text-text-primary mb-2">Restoring Backup</h3>
-              <p className="text-sm text-text-secondary mb-4">Please wait while we restore your settings, collections, and wallpapers...</p>
-              <div className="text-xs text-text-secondary">This may take a few moments depending on the number of wallpapers.</div>
+              <p className="text-sm text-text-secondary mb-4">
+                Please wait while we restore your settings, collections, and wallpapers...
+              </p>
+              <div className="text-xs text-text-secondary">
+                This may take a few moments depending on the number of wallpapers.
+              </div>
             </div>
           </div>
         </div>
@@ -285,9 +265,18 @@ export function SettingsPage() {
 
       {/* Header with Back Button */}
       <div className="flex items-center space-x-3 mb-6">
-        <button onClick={() => setCurrentPage("home")} className="p-2 rounded-xl text-text-primary hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer border border-border hover:border-primary" title="Back to Home">
+        <button
+          onClick={() => setCurrentPage("home")}
+          className="p-2 rounded-xl text-text-primary hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer border border-border hover:border-primary"
+          title="Back to Home"
+        >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <h1 className="text-xl font-bold text-text-primary">Settings</h1>
@@ -297,11 +286,16 @@ export function SettingsPage() {
       {message && (
         <div
           className={`p-4 rounded-2xl text-sm font-medium transition-all duration-300 animate-in slide-in-from-top shadow-sm ${
-            message.includes("Error") || message.includes("failed") ? "bg-danger-light text-danger-hover border border-danger" : "bg-success-light text-success-hover border border-success"
+            message.includes("Error") || message.includes("failed")
+              ? "bg-danger-light text-danger-hover border border-danger"
+              : "bg-success-light text-success-hover border border-success"
           }`}
         >
           <div className="break-words text-center flex items-center justify-center space-x-2">
-            <Icon name={message.includes("Error") || message.includes("failed") ? "settings" : "check"} size={16} />
+            <Icon
+              name={message.includes("Error") || message.includes("failed") ? "settings" : "check"}
+              size={16}
+            />
             <span>{message}</span>
           </div>
         </div>
@@ -319,7 +313,7 @@ export function SettingsPage() {
               <input
                 type="password"
                 value={settings.weather_api_key}
-                onChange={(e) => setSettings({ ...settings, weather_api_key: e.target.value })}
+                onChange={e => setSettings({ ...settings, weather_api_key: e.target.value })}
                 onBlur={handleWeatherApiKeyBlur}
                 placeholder="Enter your WeatherAPI.com key"
                 className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
@@ -340,14 +334,18 @@ export function SettingsPage() {
             </div>
             <p className="text-xs text-text-secondary mt-2 leading-relaxed">
               Get a free API key at{" "}
-              <a href="https://www.weatherapi.com/signup.aspx" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-hover underline">
+              <a
+                href="https://www.weatherapi.com/signup.aspx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary-hover underline"
+              >
                 weatherapi.com/signup
               </a>{" "}
               (1M calls/month free)
             </p>
           </div>
         </div>
-
       </div>
 
       {/* Location Settings */}
@@ -359,10 +357,13 @@ export function SettingsPage() {
               id="auto-location"
               type="checkbox"
               checked={settings.use_auto_location}
-              onChange={(e) => handleAutoLocationChange(e.target.checked)}
+              onChange={e => handleAutoLocationChange(e.target.checked)}
               className="w-4 h-4 text-white bg-card border border-border rounded-md focus:ring-primary focus:ring-2 accent-primary"
             />
-            <label htmlFor="auto-location" className="ml-3 text-sm font-medium text-text-primary cursor-pointer">
+            <label
+              htmlFor="auto-location"
+              className="ml-3 text-sm font-medium text-text-primary cursor-pointer"
+            >
               Auto-detect location via IP address
             </label>
           </div>
@@ -375,16 +376,17 @@ export function SettingsPage() {
               <input
                 type="text"
                 value={settings.location}
-                onChange={(e) => setSettings({ ...settings, location: e.target.value })}
+                onChange={e => setSettings({ ...settings, location: e.target.value })}
                 onBlur={handleLocationBlur}
                 placeholder="e.g., New York, London, 40.7128,-74.0060"
                 className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
-              <p className="text-xs text-text-secondary mt-2 leading-relaxed">City name, coordinates (lat,lon), or airport code</p>
+              <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+                City name, coordinates (lat,lon), or airport code
+              </p>
             </div>
           )}
         </div>
-
       </div>
 
       {/* Theme Settings */}
@@ -394,16 +396,31 @@ export function SettingsPage() {
           <div className="flex items-center justify-between p-3 rounded-xl bg-surface/50 border border-border/50">
             <div className="flex items-center space-x-3">
               <div className="p-2 rounded-lg bg-primary/10">
-                <Icon name={theme === "dark" ? "night" : "sunny"} size={20} className="text-primary" />
+                <Icon
+                  name={theme === "dark" ? "night" : "sunny"}
+                  size={20}
+                  className="text-primary"
+                />
               </div>
               <div>
-                <label className="text-sm font-medium text-text-primary cursor-pointer">Dark Mode</label>
-                <p className="text-xs text-text-secondary">{theme === "dark" ? "Currently using dark theme" : "Currently using light theme"}</p>
+                <label className="text-sm font-medium text-text-primary cursor-pointer">
+                  Dark Mode
+                </label>
+                <p className="text-xs text-text-secondary">
+                  {theme === "dark" ? "Currently using dark theme" : "Currently using light theme"}
+                </p>
               </div>
             </div>
-            <button onClick={toggleTheme} className="relative inline-flex items-center cursor-pointer">
-              <div className={`w-12 h-6 rounded-full transition-colors ${theme === "dark" ? "bg-primary" : "bg-border"}`}>
-                <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${theme === "dark" ? "translate-x-7" : "translate-x-1"} mt-1`} />
+            <button
+              onClick={toggleTheme}
+              className="relative inline-flex items-center cursor-pointer"
+            >
+              <div
+                className={`w-12 h-6 rounded-full transition-colors ${theme === "dark" ? "bg-primary" : "bg-border"}`}
+              >
+                <div
+                  className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${theme === "dark" ? "translate-x-7" : "translate-x-1"} mt-1`}
+                />
               </div>
             </button>
           </div>
@@ -419,10 +436,12 @@ export function SettingsPage() {
         <h3 className="text-lg font-semibold text-text-primary mb-4">Cache Management</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-2">Cache Duration</label>
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Cache Duration
+            </label>
             <select
               value={settings.cache_duration_minutes}
-              onChange={(e) => handleCacheDurationChange(parseInt(e.target.value))}
+              onChange={e => handleCacheDurationChange(parseInt(e.target.value))}
               className="w-full px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
             >
               <option value={5}>5 minutes</option>
@@ -431,59 +450,19 @@ export function SettingsPage() {
               <option value={45}>45 minutes</option>
               <option value={60}>60 minutes</option>
             </select>
-            <p className="text-xs text-text-secondary mt-2 leading-relaxed">Weather data is cached to reduce API calls. Shorter duration = more up-to-date data but more API usage.</p>
+            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+              Weather data is cached to reduce API calls. Shorter duration = more up-to-date data
+              but more API usage.
+            </p>
           </div>
           <div>
-            <Button onClick={clearWeatherCache} variant="secondary" className="shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+            <Button
+              onClick={clearWeatherCache}
+              variant="secondary"
+              className="shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            >
               Clear Weather Cache
             </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Gemini AI API Settings */}
-      <div className="bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-card-hover transition-all duration-200">
-        <h3 className="text-lg font-semibold text-text-primary mb-4">AI Generation Configuration</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-text-primary mb-2">
-              Google Gemini API Key
-            </label>
-            <div className="flex space-x-3">
-              <input
-                type="password"
-                value={settings.gemini_api_key}
-                onChange={(e) => setSettings({ ...settings, gemini_api_key: e.target.value })}
-                onBlur={handleGeminiApiKeyBlur}
-                placeholder="Enter your Gemini API key"
-                className="flex-1 px-3 py-2 border border-border rounded-xl bg-card text-text-primary text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              />
-              <Button onClick={testGeminiApiKey} disabled={isLoading} size="md">
-                {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-text-inverse border-t-transparent rounded-full animate-spin"></div>
-                    <span>Testing...</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Icon name="check" size={16} />
-                    <span>Test</span>
-                  </div>
-                )}
-              </Button>
-            </div>
-            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-              Get a free API key at{" "}
-              <a
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-primary-hover underline"
-              >
-                Google AI Studio
-              </a>
-              . Required for AI wallpaper generation features.
-            </p>
           </div>
         </div>
       </div>
@@ -493,7 +472,10 @@ export function SettingsPage() {
         <h3 className="text-lg font-semibold text-text-primary mb-4">Backup & Restore</h3>
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-text-secondary mb-4 leading-relaxed">Export your settings and wallpapers to a backup file, or restore from a previous backup.</p>
+            <p className="text-sm text-text-secondary mb-4 leading-relaxed">
+              Export your settings and wallpapers to a backup file, or restore from a previous
+              backup.
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={exportBackup}
@@ -525,7 +507,8 @@ export function SettingsPage() {
               <div className="flex items-start space-x-2">
                 <Icon name="settings" size={16} className="text-warning mt-0.5 flex-shrink-0" />
                 <p className="text-xs text-text-secondary leading-relaxed">
-                  <strong className="text-warning">Important:</strong> Importing will replace your current settings and collections. Make sure to export a backup first!
+                  <strong className="text-warning">Important:</strong> Importing will replace your
+                  current settings and collections. Make sure to export a backup first!
                 </p>
               </div>
             </div>

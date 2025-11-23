@@ -5,7 +5,6 @@ import { useSchedulerInitialization } from "./hooks/useSchedulerInitialization";
 import { useSchedulerSync } from "./hooks/useSchedulerSync";
 import { HomePage } from "./pages/HomePage";
 import { CollectionsPage } from "./pages/CollectionsPage";
-import { AIGeneratorPage } from "./pages/AIGeneratorPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { IconSprite } from "./components/IconSprite";
 import { BackgroundShapes } from "./components/BackgroundShapes";
@@ -28,8 +27,6 @@ function App() {
         return <HomePage />;
       case "collections":
         return <CollectionsPage />;
-      case "ai-generator":
-        return <AIGeneratorPage />;
       case "settings":
         return <SettingsPage />;
       default:

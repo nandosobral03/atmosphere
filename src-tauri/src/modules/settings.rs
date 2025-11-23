@@ -5,7 +5,6 @@ use crate::modules::utils::get_app_data_dir;
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AppSettings {
     pub weather_api_key: String,
-    pub gemini_api_key: String,
     pub location: String,
     pub use_auto_location: bool,
     pub cache_duration_minutes: u64,
@@ -15,7 +14,6 @@ impl Default for AppSettings {
     fn default() -> Self {
         Self {
             weather_api_key: String::new(),
-            gemini_api_key: String::new(),
             location: String::new(),
             use_auto_location: true,
             cache_duration_minutes: 60, // Default to 60 minutes
