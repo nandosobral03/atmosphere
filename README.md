@@ -1,8 +1,8 @@
-# Wallpaper Thing
+# Atmosphere
 
 An intelligent desktop wallpaper manager that automatically changes your wallpaper based on time of day and weather conditions.
 
-![Wallpaper Thing Interface](public/images/app-preview.png)
+![Atmosphere Interface](public/images/app-preview.png)
 
 ## Features
 
@@ -19,7 +19,7 @@ An intelligent desktop wallpaper manager that automatically changes your wallpap
 
 ### Download Release
 
-The easiest way to install Wallpaper Thing is to download the latest release for your operating system:
+The easiest way to install Atmosphere is to download the latest release for your operating system:
 
 1. Go to the **[Releases Page](https://github.com/nandosobral03/atmosphere/releases)** on GitHub.
 2. Download the installer for your platform:
@@ -35,7 +35,7 @@ The easiest way to install Wallpaper Thing is to download the latest release for
 
 ### 1. Get a Weather API Key
 
-Wallpaper Thing uses WeatherAPI.com for accurate weather data. It's free for personal use!
+Atmosphere uses WeatherAPI.com for accurate weather data. It's free for personal use!
 
 **[Read our guide on how to get your free API key](WEATHER_API_SETUP.md)**
 
