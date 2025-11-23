@@ -82,13 +82,13 @@ If you want to build it from source:
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Run in development mode
-npm run tauri dev
+bun run tauri dev
 
 # Build for production
-npm run tauri build
+bun run tauri build
 ```
 
 ## License
