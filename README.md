@@ -24,8 +24,6 @@ The easiest way to install Atmosphere is to download the latest release for your
 1. Go to the **[Releases Page](https://github.com/nandosobral03/atmosphere/releases)** on GitHub.
 2. Download the installer for your platform:
    - **Windows**: `wallpaperthing_x.x.x_x64-setup.exe` or `.msi`
-   - **macOS**: `.dmg` or `.app.tar.gz` (if available)
-   - **Linux**: `.deb` or `.AppImage` (if available)
 3. Run the installer and follow the prompts.
 4. Launch Wallpaper Thing from your applications menu.
 
